@@ -1,22 +1,28 @@
 #include <string>
+#include <vector>
 
 #include <SFML/Graphics.hpp>
 
 #include "inc/gameEngine.h"
+#include "inc/gameVersion.h"
+#include "inc/physics.h"
+#include "inc/level.h"
 
 int main(){
 	GameEngine game;
-	sf::RenderWindow window(sf::VideoMode(360, 270), "simpleXcpp");
+	sf::RenderWindow window(sf::VideoMode(game.windowWidth, game.windowHeight), "simpleXcpp");
 	window.setFramerateLimit(game.frameLimit);
 	
-	sf::CircleShape shape(100.f);
+	Level level("blocco;0;240;360;20;15;52;61;255;\\nblocco;50;124;60;30;255;52;61;255;\\nblocco;1000;250;100;50;0;200;255;255;\\n");
+	
+	sf::CircleShape shape(32.f);
 	shape.setFillColor(sf::Color::Green);
 	
 	sf::Font font;
-	if (!font.loadFromFile("res/font/Swanston.ttf")){/*error loading the font*/}
+	if(!font.loadFromFile("res/font/Swanston.ttf")){/*error loading the font*/}
 	sf::Text text;
 	text.setFont(font);
-	text.setCharacterSize(32);
+	text.setCharacterSize(16);
 	text.setFillColor(sf::Color::Red);
 	text.move(shape.getRadius()/2, shape.getRadius()/2);
 
@@ -50,8 +56,13 @@ int main(){
 
 		//rendering
 		window.clear();
+		//render player
 		window.draw(shape);
 		window.draw(text);
+		//render level
+		for(int i=0; i<level.contaEntity; i++){
+			window.draw(level.entity[i].renderHitbox());
+		}
 		window.display();
 	}
 

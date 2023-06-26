@@ -2,8 +2,10 @@ class GameEngine {
  public:
 	bool debugMode = false;
 	const int frameLimit = 60;
+	const int windowWidth=360, windowHeight=270;
 	
-	int gamestate = 0;
+	int gamestate = -1;
+	//stato -1: in partita
 	//stato 0: nel menu principale - var nelMenuPrincipale=true; 
 	//stato 1: selezione del livello - var stageSelection=false; 
 	//stato 2: menu di pausa - var menuDiPausa=false; 
