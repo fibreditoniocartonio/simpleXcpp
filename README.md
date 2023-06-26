@@ -1,6 +1,6 @@
 # simpleXcpp
 A simple action platformer in C++ and SFML, with the idea to make it become a metroidvania sooner or later.<br>
-After seeing the limitation of [Javascript](https://github.com/fibreditoniocartonio/simpleXjs), I decided to port simplX in C++.
+After seeing the limitation of [Javascript](https://github.com/fibreditoniocartonio/simpleXjs), I decided to port simpleX in C++.
 
 ## Building
 Clone this repo and run the script compile.sh. The script requires bash and g++, in the future I will use something more compatible with other platform.
