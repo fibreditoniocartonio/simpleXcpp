@@ -15,6 +15,7 @@ class Player {
 		this->text.setCharacterSize(this->charSize);
 		this->text.setFillColor(sf::Color::Red);
 		if(!this->font.loadFromFile("res/font/PixelOperatorMono.ttf")){/*error loading fonts*/}
+		//this->font.setSmooth(false); //require SFML 2.6 (I have 2.5.1 because it's the last available on Gentoo...)
 		this->text.setFont(this->font);
 	}
 

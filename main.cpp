@@ -3,12 +3,12 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "inc/gameEngine.h"
-#include "inc/gameVersion.h"
-#include "inc/level.h"
-#include "inc/player.h"
-#include "inc/camera.h"
-#include "inc/physics.h"
+#include "inc/gameEngine.hpp"
+#include "inc/gameVersion.hpp"
+#include "inc/level.hpp"
+#include "inc/player.hpp"
+#include "inc/camera.hpp"
+#include "inc/physics.hpp"
 
 int main(){
 	GameEngine game;
