@@ -1,6 +1,5 @@
 #include <string>
 #include <vector>
-#include <memory>
 
 #include <SFML/Graphics.hpp>
 
@@ -14,16 +13,17 @@ int main(){
 	sf::RenderWindow window(sf::VideoMode(game.windowWidth, game.windowHeight), "simpleXcpp");
 	window.setFramerateLimit(game.frameLimit);
 	
-	Level level("blocco;0;240;360;20;15;52;61;255;\\nblocco;50;124;60;30;255;52;61;255;\\nblocco;1000;250;100;50;0;200;255;255;\\n");
+	Level level;
+	level.LoadLevel("proprieta;1100;300;0.62;0.85\\nblocco;0;240;360;20;15;52;61;255;\\nblocco;50;124;60;30;255;52;61;255;\\nblocco;1000;250;100;50;0;200;255;255;\\n");
 	
-	sf::CircleShape shape(32.f);
+	sf::CircleShape shape(16.f);
 	shape.setFillColor(sf::Color::Green);
 	
 	sf::Font font;
-	if(!font.loadFromFile("res/font/Swanston.ttf")){/*error loading the font*/}
+	if(!font.loadFromFile("res/font/PixelOperatorMono.ttf")){/*error loading the font*/}
 	sf::Text text;
 	text.setFont(font);
-	text.setCharacterSize(16);
+	text.setCharacterSize(8);
 	text.setFillColor(sf::Color::Red);
 	text.move(shape.getRadius()/2, shape.getRadius()/2);
 
@@ -45,8 +45,8 @@ int main(){
         	}
 		
 		//testing input
-		int x=0, y=0, speed=10;
-		if(game.keys[5]){speed*=2;}
+		int x=0, y=0, speed=1;
+		if(game.keys[5]){speed*=5;}
 		if(game.keys[0]){y=-speed;}
 		if(game.keys[1]){y=+speed;}
 		if(game.keys[2]){x=+speed;}

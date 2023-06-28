@@ -26,18 +26,19 @@ class Level {
  	//vettore di entita'
 	std::vector<Entity*> entity;
 	int contaEntity;
+	int maxWidth, maxHeight;
+	float gravity, friction;
 
-	//costruttore e decoder
-	Level(std::string stringaLivello){
-		void DecodeObj(std::vector<Entity*>* puntaEntity, std::string tempString[32]);
+	//Decoder
+	void LoadLevel(std::string stringaLivello){
+		void DecodeObj(Level* level, std::string tempString[32]);
 		int objState=0;
-		contaEntity=0;
+		this->contaEntity=0;
 		std::string tempString[32];
 		//cicle the string to decode it
 		for (int i=0; i<stringaLivello.length(); i++){
 			if(stringaLivello[i]=='\\' && stringaLivello[i+1]=='n'){ //decode obj and start again with the next one
-				DecodeObj(&entity, tempString);
-				contaEntity++;
+				DecodeObj(this, tempString);
 				for(int j=0; j<32; j++){tempString[j]="";}
 				objState=0;
 				i++;
@@ -54,12 +55,49 @@ class Level {
 		for(int i=0; i<this->contaEntity; i++){
 			delete this->entity[i];
 		}
-		this->contaEntity = 0;
+		this->contaEntity=0;
 	}
 };
 
-void DecodeObj(std::vector<Entity*>* puntaEntity, std::string tempString[32]){
-	if(tempString[0] == "blocco"){
+void DecodeObj(Level* level, std::string tempString[32]){
+	if(tempString[0] == "proprieta"){
+		level->maxWidth=std::stoi(tempString[1]);
+		level->maxHeight=std::stoi(tempString[2]);
+		level->gravity=std::stof(tempString[3]);
+		level->friction=std::stof(tempString[4]);
+		Blocco* newBlocco[4]; //create level borders
+		for(int i=0; i<4; i++){
+			newBlocco[i] = new Blocco();
+			newBlocco[i]->id="blocco";
+			newBlocco[i]->color=sf::Color(255, 255, 0, 255);
+			//newBlocco[i]->color=sf::Color(0, 0, 0, 0); //invisible level borders
+			switch (i){
+				case 0: newBlocco[i]->x=-1;
+					newBlocco[i]->y=-1;
+					newBlocco[i]->width=level->maxWidth+1;
+					newBlocco[i]->height=1;
+					break;
+				case 1: newBlocco[i]->x=-1;
+					newBlocco[i]->y=-1;
+					newBlocco[i]->width=1;
+					newBlocco[i]->height=level->maxHeight+1;
+					break;
+				case 2: newBlocco[i]->x=-1;
+					newBlocco[i]->y=level->maxHeight;
+					newBlocco[i]->width=level->maxWidth+1;
+					newBlocco[i]->height=1;
+					break;
+				default: newBlocco[i]->x=level->maxWidth;
+					newBlocco[i]->y=-1;
+					newBlocco[i]->width=1;
+					newBlocco[i]->height=level->maxHeight+1;
+					break;
+			}
+			level->entity.push_back(newBlocco[i]);
+		}
+		level->contaEntity+=4;
+
+	}else if(tempString[0] == "blocco"){
 		Blocco* newBlocco = new Blocco();
 		newBlocco->id=tempString[0];
 		newBlocco->x=std::stoi(tempString[1]);
@@ -70,6 +108,7 @@ void DecodeObj(std::vector<Entity*>* puntaEntity, std::string tempString[32]){
 		newBlocco->color.g=std::stoi(tempString[6]);
 		newBlocco->color.b=std::stoi(tempString[7]);
 		newBlocco->color.a=std::stoi(tempString[8]);
-		puntaEntity->push_back(newBlocco);
+		level->entity.push_back(newBlocco);
+		level->contaEntity++;
 	}
 }
