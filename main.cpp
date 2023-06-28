@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <SFML/Graphics.hpp>
 
@@ -61,7 +62,7 @@ int main(){
 		window.draw(text);
 		//render level
 		for(int i=0; i<level.contaEntity; i++){
-			window.draw(level.entity[i].renderHitbox());
+			window.draw(level.entity[i]->RenderHitbox());
 		}
 		window.display();
 	}

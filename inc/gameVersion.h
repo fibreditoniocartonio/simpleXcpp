@@ -1,1 +1,1 @@
-#define versioneDiGioco "v0.20230626-c6"
+#define versioneDiGioco "v0.20230628-c7"
