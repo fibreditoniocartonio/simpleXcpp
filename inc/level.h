@@ -4,24 +4,25 @@ class Entity {
 	std::string id;
 	sf::Color color;
 	virtual void Physics() {}
-	virtual sf::RectangleShape RenderHitbox(){
-		sf::RectangleShape rectangle(sf::Vector2f(width, height));
-		return rectangle;}
+	virtual void Render(sf::RenderWindow* window){}
 	virtual ~Entity() {}
 };
 
 class Blocco : public Entity{
  public:
+	sf::RectangleShape shape;
+	void CreateHitbox(){
+		this->shape.setSize(sf::Vector2f(this->width, this->height));
+		this->shape.setPosition(this->x, this->y);
+		this->shape.setFillColor(this->color);
+	}
 	void Physics() override{}
-	sf::RectangleShape RenderHitbox() override{
-		sf::RectangleShape rectangle(sf::Vector2f(width, height));
-		rectangle.setPosition(x, y);
-		rectangle.setFillColor(color);
-		return rectangle;
+	void Render(sf::RenderWindow* window) override{
+		window->draw(shape);
 	}
 };
 
-class Level {
+class Livello {
  public:
  	//vettore di entita'
 	std::vector<Entity*> entity;
@@ -31,7 +32,7 @@ class Level {
 
 	//Decoder
 	void LoadLevel(std::string stringaLivello){
-		void DecodeObj(Level* level, std::string tempString[32]);
+		void DecodeObj(Livello* level, std::string tempString[32]);
 		int objState=0;
 		this->contaEntity=0;
 		std::string tempString[32];
@@ -59,7 +60,7 @@ class Level {
 	}
 };
 
-void DecodeObj(Level* level, std::string tempString[32]){
+void DecodeObj(Livello* level, std::string tempString[32]){
 	if(tempString[0] == "proprieta"){
 		level->maxWidth=std::stoi(tempString[1]);
 		level->maxHeight=std::stoi(tempString[2]);
@@ -93,6 +94,7 @@ void DecodeObj(Level* level, std::string tempString[32]){
 					newBlocco[i]->height=level->maxHeight+1;
 					break;
 			}
+			newBlocco[i]->CreateHitbox();
 			level->entity.push_back(newBlocco[i]);
 		}
 		level->contaEntity+=4;
@@ -108,6 +110,7 @@ void DecodeObj(Level* level, std::string tempString[32]){
 		newBlocco->color.g=std::stoi(tempString[6]);
 		newBlocco->color.b=std::stoi(tempString[7]);
 		newBlocco->color.a=std::stoi(tempString[8]);
+		newBlocco->CreateHitbox();
 		level->entity.push_back(newBlocco);
 		level->contaEntity++;
 	}

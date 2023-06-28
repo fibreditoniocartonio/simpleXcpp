@@ -5,27 +5,21 @@
 
 #include "inc/gameEngine.h"
 #include "inc/gameVersion.h"
-#include "inc/physics.h"
 #include "inc/level.h"
+#include "inc/player.h"
+#include "inc/camera.h"
+#include "inc/physics.h"
 
 int main(){
 	GameEngine game;
 	sf::RenderWindow window(sf::VideoMode(game.windowWidth, game.windowHeight), "simpleXcpp");
 	window.setFramerateLimit(game.frameLimit);
+	window.setView(calcViewWhenResized(window.getSize(), sf::Vector2u(game.windowWidth, game.windowHeight)));
+
+	Livello level;
+	level.LoadLevel("proprieta;1100;500;0.62;0.85\\nblocco;0;240;360;20;15;52;61;255;\\nblocco;50;124;60;30;255;52;61;255;\\nblocco;1000;250;100;50;0;200;255;255;\\n");
 	
-	Level level;
-	level.LoadLevel("proprieta;1100;300;0.62;0.85\\nblocco;0;240;360;20;15;52;61;255;\\nblocco;50;124;60;30;255;52;61;255;\\nblocco;1000;250;100;50;0;200;255;255;\\n");
-	
-	sf::CircleShape shape(16.f);
-	shape.setFillColor(sf::Color::Green);
-	
-	sf::Font font;
-	if(!font.loadFromFile("res/font/PixelOperatorMono.ttf")){/*error loading the font*/}
-	sf::Text text;
-	text.setFont(font);
-	text.setCharacterSize(8);
-	text.setFillColor(sf::Color::Red);
-	text.move(shape.getRadius()/2, shape.getRadius()/2);
+	Player player;
 
 	//game loop
 	while (window.isOpen()){
@@ -34,6 +28,9 @@ int main(){
 		while (window.pollEvent(event)){
 			if (event.type == sf::Event::Closed){
 				window.close();
+			}
+			if (event.type == sf::Event::Resized){ //reset the view when window is resized
+				window.setView(calcViewWhenResized(window.getSize(), sf::Vector2u(game.windowWidth, game.windowHeight)));
 			}
 			//read input events
 			if (event.type == sf::Event::KeyPressed){
@@ -44,25 +41,22 @@ int main(){
 			}
         	}
 		
-		//testing input
-		int x=0, y=0, speed=1;
-		if(game.keys[5]){speed*=5;}
-		if(game.keys[0]){y=-speed;}
-		if(game.keys[1]){y=+speed;}
-		if(game.keys[2]){x=+speed;}
-		if(game.keys[3]){x=-speed;}
-		shape.move(x,y);
-		text.move(x,y);
-		text.setString(("X: "+std::to_string((int)text.getPosition().x)+"\nY: "+std::to_string((int)text.getPosition().y)));
+		//Physics
+		player.Physics(&game, &level);
 
-		//rendering
-		window.clear();
+		//Rendering
+		//window.clear();
+		window.clear(sf::Color(0,0,50,255));
+
 		//render player
-		window.draw(shape);
-		window.draw(text);
+		player.Render(&window);
+		if(game.gamestate==-1){ //when in game move the camera following the player
+			window.setView(calcViewOnPlayerMovement(window.getView(), &player, &level, game.windowWidth, game.windowHeight));
+		}
+
 		//render level
 		for(int i=0; i<level.contaEntity; i++){
-			window.draw(level.entity[i]->RenderHitbox());
+			level.entity[i]->Render(&window);
 		}
 		window.display();
 	}
