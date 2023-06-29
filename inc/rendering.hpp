@@ -58,9 +58,6 @@ void RenderGameScreen(GameEngine* game, Player* player, Livello* level, sf::Rend
 		break;
 
 	 default: //usually -1, in game
-		//render player
-		window->setView(calcViewOnPlayerMovement(window->getView(), player, level, game->windowWidth, game->windowHeight));
-		player->Render(window);
 		//render level
 		Entity screen = Entity(window->getView().getCenter().x-game->windowWidth/2, window->getView().getCenter().y-game->windowHeight/2, game->windowWidth, game->windowHeight);
 		for(int i=0; i < level->contaEntity; i++){
@@ -68,6 +65,9 @@ void RenderGameScreen(GameEngine* game, Player* player, Livello* level, sf::Rend
 				level->entity[i]->Render(window);
 			}
 		}
+		//render player
+		window->setView(calcViewOnPlayerMovement(window->getView(), player, level, game->windowWidth, game->windowHeight));
+		player->Render(window);
 		break;
 	}//fine dello switch(gamestate)
 	window->display();

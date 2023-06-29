@@ -18,8 +18,7 @@ int main(){
 	window.setView(calcViewWhenResized(window.getSize(), sf::Vector2u(game.windowWidth, game.windowHeight)));
 
 	Livello level;
-	level.LoadLevel("<proprieta;1100;300;0.62;0.85><blocco;0;240;360;20;15;52;61;255;><blocco;50;124;60;30;255;52;61;255;><blocco;1000;250;100;50;0;200;255;255;>");
-	//level.LoadLevel("proprieta;1100;500;0.62;0.80\\nblocco;0;240;360;20;15;52;61;255;\\nblocco;50;124;60;30;255;52;61;255;\\nblocco;1000;250;100;50;0;200;255;255;\\n");
+	level.LoadLevel("<proprieta;1100;300;0.65;0.86><blocco;0;240;360;20;15;52;61;255;><blocco;50;124;60;30;255;52;61;255;><blocco;1000;250;100;50;0;200;255;255;>");
 	
 	Player player;
 
@@ -48,7 +47,6 @@ int main(){
 
 		//Rendering
 		RenderGameScreen(&game, &player, &level, &window);
-
 	}
 	return 0;
 }

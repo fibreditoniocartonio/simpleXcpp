@@ -56,25 +56,25 @@ void DecodeObj(Livello* level, std::string tempString[32]){
 			newBlocco[i]->color=sf::Color(255, 255, 0, 255);
 			//newBlocco[i]->color=sf::Color(0, 0, 0, 0); //invisible level borders
 			switch (i){
-				case 0: newBlocco[i]->x=-1;
-					newBlocco[i]->y=-1;
-					newBlocco[i]->width=level->maxWidth+1;
-					newBlocco[i]->height=1;
+				case 0: newBlocco[i]->x=-100;
+					newBlocco[i]->y=-100;
+					newBlocco[i]->width=level->maxWidth+100;
+					newBlocco[i]->height=100;
 					break;
-				case 1: newBlocco[i]->x=-1;
-					newBlocco[i]->y=-1;
-					newBlocco[i]->width=1;
-					newBlocco[i]->height=level->maxHeight+1;
+				case 1: newBlocco[i]->x=-100;
+					newBlocco[i]->y=-100;
+					newBlocco[i]->width=100;
+					newBlocco[i]->height=level->maxHeight+100;
 					break;
-				case 2: newBlocco[i]->x=-1;
+				case 2: newBlocco[i]->x=-100;
 					newBlocco[i]->y=level->maxHeight;
-					newBlocco[i]->width=level->maxWidth+1;
-					newBlocco[i]->height=1;
+					newBlocco[i]->width=level->maxWidth+100;
+					newBlocco[i]->height=100;
 					break;
 				default: newBlocco[i]->x=level->maxWidth;
-					newBlocco[i]->y=-1;
-					newBlocco[i]->width=1;
-					newBlocco[i]->height=level->maxHeight+1;
+					newBlocco[i]->y=-100;
+					newBlocco[i]->width=100;
+					newBlocco[i]->height=level->maxHeight+100;
 					break;
 			}
 			newBlocco[i]->CreateHitbox();

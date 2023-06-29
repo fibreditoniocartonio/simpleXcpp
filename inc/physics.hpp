@@ -22,13 +22,25 @@ int CollisionBetween(Entity* e1, Entity* e2){
 	for (int i=0; i<4; i++){
 		if(VerifyCollision(&e1Sides[i], e2)){
 			if(collided < 0){
-		      		collided=i+1;
+		      		collided=i;
 			}else{ //if multiple sides collision
-
+				for(int j=0; j<i+1; j++){
+					if(e1Sides[j].width>1){
+						e1Sides[j].x+=(int)(e1Sides[j].width/2);
+						e1Sides[j].width=(int)(e1Sides[j].width/4);
+					}
+					if(e1Sides[j].height>1){ 
+						e1Sides[j].y+=(int)(e1Sides[j].height/2);
+						e1Sides[j].height=(int)(e1Sides[j].height/4);
+					}
+					if(VerifyCollision(&e1Sides[j], e2)){ 
+						collided=j;
+					}
+				}
 			}
 	      	}
 	}
-	return collided;
+	return collided+1;
 }
 
 void DoGamePhysics(GameEngine* game, Player* player, Livello* level, sf::RenderWindow* window){

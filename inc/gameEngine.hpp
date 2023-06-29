@@ -16,7 +16,7 @@ class GameEngine {
 	//stato 7: menu Mappa - map menu
 
 	//input key settings
-	sf::Keyboard::Key ultimoTastoLetto;
+	int ultimoTastoLetto;
 	bool keys[11]={
 		false, //0 = su
 		false, //1 = giu
@@ -44,10 +44,11 @@ class GameEngine {
 	 	{sf::Keyboard::C,	sf::Keyboard::R}
 	};
 	void updateKeys(sf::Keyboard::Key keyInput, bool isPressed){
-		for (int keyIndex=0; keyIndex<sizeof(keys)/sizeof(bool); keyIndex++){
+		for (int keyIndex=0; keyIndex < sizeof(keys)/sizeof(bool); keyIndex++){
 			if(keyInput==keySettings[keyIndex][0] || keyInput==keySettings[keyIndex][1]){
 				if(isPressed){
 					keys[keyIndex]=true;
+					ultimoTastoLetto=keyIndex;
 				}else{
 					keys[keyIndex]=false;
 				}
