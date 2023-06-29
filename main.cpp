@@ -5,10 +5,11 @@
 
 #include "inc/gameEngine.hpp"
 #include "inc/gameVersion.hpp"
+#include "inc/entity.hpp"
 #include "inc/level.hpp"
 #include "inc/player.hpp"
-#include "inc/camera.hpp"
 #include "inc/physics.hpp"
+#include "inc/rendering.hpp"
 
 int main(){
 	GameEngine game;
@@ -17,7 +18,8 @@ int main(){
 	window.setView(calcViewWhenResized(window.getSize(), sf::Vector2u(game.windowWidth, game.windowHeight)));
 
 	Livello level;
-	level.LoadLevel("proprieta;1100;500;0.62;0.85\\nblocco;0;240;360;20;15;52;61;255;\\nblocco;50;124;60;30;255;52;61;255;\\nblocco;1000;250;100;50;0;200;255;255;\\n");
+	level.LoadLevel("<proprieta;1100;300;0.62;0.85><blocco;0;240;360;20;15;52;61;255;><blocco;50;124;60;30;255;52;61;255;><blocco;1000;250;100;50;0;200;255;255;>");
+	//level.LoadLevel("proprieta;1100;500;0.62;0.80\\nblocco;0;240;360;20;15;52;61;255;\\nblocco;50;124;60;30;255;52;61;255;\\nblocco;1000;250;100;50;0;200;255;255;\\n");
 	
 	Player player;
 
@@ -42,24 +44,11 @@ int main(){
         	}
 		
 		//Physics
-		player.Physics(&game, &level);
+		DoGamePhysics(&game, &player, &level, &window);
 
 		//Rendering
-		//window.clear();
-		window.clear(sf::Color(0,0,50,255));
+		RenderGameScreen(&game, &player, &level, &window);
 
-		//render player
-		player.Render(&window);
-		if(game.gamestate==-1){ //when in game move the camera following the player
-			window.setView(calcViewOnPlayerMovement(window.getView(), &player, &level, game.windowWidth, game.windowHeight));
-		}
-
-		//render level
-		for(int i=0; i<level.contaEntity; i++){
-			level.entity[i]->Render(&window);
-		}
-		window.display();
 	}
-
 	return 0;
 }

@@ -1,26 +1,4 @@
-class Entity {
- public:
-	int x, y, width, height;
-	std::string id;
-	sf::Color color;
-	virtual void Physics() {}
-	virtual void Render(sf::RenderWindow* window){}
-	virtual ~Entity() {}
-};
-
-class Blocco : public Entity{
- public:
-	sf::RectangleShape shape;
-	void CreateHitbox(){
-		this->shape.setSize(sf::Vector2f(this->width, this->height));
-		this->shape.setPosition(this->x, this->y);
-		this->shape.setFillColor(this->color);
-	}
-	void Physics() override{}
-	void Render(sf::RenderWindow* window) override{
-		window->draw(shape);
-	}
-};
+class Player;
 
 class Livello {
  public:
@@ -37,16 +15,21 @@ class Livello {
 		this->contaEntity=0;
 		std::string tempString[32];
 		//cicle the string to decode it
+		bool loading = false;
 		for (int i=0; i<stringaLivello.length(); i++){
-			if(stringaLivello[i]=='\\' && stringaLivello[i+1]=='n'){ //decode obj and start again with the next one
+			if(stringaLivello[i]=='>'){ //decode obj and start again with the next one
 				DecodeObj(this, tempString);
 				for(int j=0; j<32; j++){tempString[j]="";}
 				objState=0;
-				i++;
+				loading=false;
 			}else if(stringaLivello[i]==';'){ //next param
 				objState++;
+			}else if(stringaLivello[i]=='<'){ //start loading
+				loading = true;
 			}else{
-				tempString[objState]+=stringaLivello[i];
+				if(loading){
+					tempString[objState]+=stringaLivello[i];
+				}
 			}
 		}
 	}
