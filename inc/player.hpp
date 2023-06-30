@@ -9,19 +9,16 @@ class Player {
 	float jumpHeight=10;
 	bool giaSaltato=false;
 	sf::RectangleShape shape;
-	sf::Font font;
 	sf::Text text;
 	const int charSize=8;
 
-	Player(){
+	Player(GameEngine* game){
 		this->shape.setSize(sf::Vector2f(this->width, this->height));
 		this->shape.setFillColor(sf::Color(0,64,240,255));
 	
 		this->text.setCharacterSize(this->charSize);
 		this->text.setFillColor(sf::Color::Yellow);
-		if(!this->font.loadFromFile("res/font/PixelOperatorMono.ttf")){/*error loading fonts*/}
-		//this->font.setSmooth(false); //require SFML 2.6 (I have 2.5.1 because it's the last available on Gentoo...)
-		this->text.setFont(this->font);
+		this->text.setFont(game->font);
 	}
 
 	virtual void Physics(GameEngine* game, Livello* level){
@@ -86,7 +83,7 @@ class Player {
 				case 4: 
 					this->y = level->entity[i]->y-this->height+1;
 					this->yv = 0;
-					if(game->keys[5]){this->xv*=1.1;} //dash
+					if(game->keys[5]){this->xv*=(0.95/level->friction);} //dash
 					if(game->keys[4] && !this->giaSaltato){
 						this->yv=-this->jumpHeight;
 						this->giaSaltato=true;
@@ -99,6 +96,11 @@ class Player {
 
 		if(!game->keys[4]){
 			this->giaSaltato=false;
+		}
+
+
+		if(game->keys[7]){
+			Alert* alert = new Alert(game, 16, "You found you can open the menu with     ENTER and ESCAPE? Very nice.            \nHere are some other buttons:            \nMove left   -  ArrowLeft & Numpad4       Move right  -  ArrowRight & Numpad6      Jump        -  Z & Space                 Dash        -  X & LShift");
 		}
 	} 
 

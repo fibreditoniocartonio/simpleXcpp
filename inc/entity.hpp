@@ -3,6 +3,7 @@ class Level;
 
 class Entity {
  public:
+ 	bool isActive = true;
 	int x, y, width, height;
 	std::string id;
 	virtual void Physics(Player* player) {}

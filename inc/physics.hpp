@@ -45,7 +45,7 @@ int CollisionBetween(Entity* e1, Entity* e2){
 
 void DoGamePhysics(GameEngine* game, Player* player, Livello* level, sf::RenderWindow* window){
 	switch (game->gamestate){
-	 case 1:
+	 case 1: static_cast<Alert*>(game->currentMenu)->Physics(game);
 		break;
 
 	 default: //usually -1, in game
@@ -54,8 +54,10 @@ void DoGamePhysics(GameEngine* game, Player* player, Livello* level, sf::RenderW
 		//entity physics
 		Entity screen = Entity(window->getView().getCenter().x-game->windowWidth, window->getView().getCenter().y-game->windowHeight, game->windowWidth*2, game->windowHeight*2);
 		for(int i=0; i < level->contaEntity; i++){
+			if(level->entity[i]->isActive){
 			if(VerifyCollision(&screen, level->entity[i])){
 				level->entity[i]->Physics(player);
+			}
 			}
 		}
 		break;

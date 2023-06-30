@@ -3,17 +3,25 @@ class GameEngine {
 	bool debugMode = false;
 	const int frameLimit = 60;
 	const int windowWidth=360, windowHeight=270;
+	sf::Font font;
 	
 	int gamestate = -1;
+	void* currentMenu = NULL;
 	//stato -1: in partita
-	//stato 0: nel menu principale - var nelMenuPrincipale=true; 
-	//stato 1: selezione del livello - var stageSelection=false; 
+	//stato 1: c'e' un alert aperto - var alertAperto=false; 
 	//stato 2: menu di pausa - var menuDiPausa=false; 
 	//stato 3: menu opzioni - var nelMenuOpzioni=false; 
 	//stato 4: opzioni nelle stage selection - var nelleOpzioniStageSelect=false; 
-	//stato 5: c'e' un alert aperto - var alertAperto=false; 
-	//stato 6: nel menu carica partita - var nelMenuCaricaPartita=false; 
-	//stato 7: menu Mappa - map menu
+	//stato 5: nel menu carica partita - var nelMenuCaricaPartita=false; 
+	//stato 6: menu Mappa - map menu
+	
+	void ChangeGameState(int newGameState, void* newMenu){
+		if(this->currentMenu != NULL){
+			//delete this->currentMenu; //i need to understand how to do it
+		}
+		this->currentMenu=newMenu;
+		this->gamestate=newGameState;
+	}
 
 	//input key settings
 	int ultimoTastoLetto;
@@ -54,5 +62,10 @@ class GameEngine {
 				}
 			}
 		}
+	}
+
+	//costructor
+	GameEngine(){
+		if(!this->font.loadFromFile("res/font/PixelOperatorMono.ttf")){/*error loading fonts*/}
 	}
 };

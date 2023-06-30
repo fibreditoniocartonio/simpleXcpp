@@ -3,8 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "inc/gameEngine.hpp"
 #include "inc/gameVersion.hpp"
+#include "inc/gameEngine.hpp"
+#include "inc/menu.hpp"
 #include "inc/entity.hpp"
 #include "inc/level.hpp"
 #include "inc/player.hpp"
@@ -20,7 +21,7 @@ int main(){
 	Livello level;
 	level.LoadLevel("<proprieta;1100;300;0.65;0.86><blocco;0;240;360;20;15;52;61;255;><blocco;50;124;60;30;255;52;61;255;><blocco;1000;250;100;50;0;200;255;255;>");
 	
-	Player player;
+	Player player = Player(&game);
 
 	//game loop
 	while (window.isOpen()){
