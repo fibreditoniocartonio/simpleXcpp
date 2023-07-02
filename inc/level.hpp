@@ -4,15 +4,15 @@ class Livello {
  public:
  	//vettore di entita'
 	std::vector<Entity*> entity;
-	int contaEntity;
+	int contaEntity=0;
 	int maxWidth, maxHeight;
 	float gravity, friction;
 
 	//Decoder
 	void LoadLevel(std::string stringaLivello){
+		this->CleanLevel();
 		void DecodeObj(Livello* level, std::string tempString[32]);
 		int objState=0;
-		this->contaEntity=0;
 		std::string tempString[32];
 		//cicle the string to decode it
 		bool loading = false;
@@ -34,9 +34,8 @@ class Livello {
 		}
 	}
 
-	//distruttore
 	void CleanLevel(){
-		for(int i=0; i<this->contaEntity; i++){
+		for(int i=0; i < this->contaEntity; i++){
 			delete this->entity[i];
 		}
 		this->contaEntity=0;

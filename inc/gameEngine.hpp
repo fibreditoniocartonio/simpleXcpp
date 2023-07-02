@@ -16,9 +16,6 @@ class GameEngine {
 	//stato 6: menu Mappa - map menu
 	
 	void ChangeGameState(int newGameState, void* newMenu){
-		if(this->currentMenu != NULL){
-			//delete this->currentMenu; //i need to understand how to do it
-		}
 		this->currentMenu=newMenu;
 		this->gamestate=newGameState;
 	}

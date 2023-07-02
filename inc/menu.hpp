@@ -24,6 +24,7 @@ class Menu {
 class Alert : public Menu{
  public:
 	int previousGameState, borderDim;
+	void* previousMenu;
 	sf::Text testo;
 	sf::Color color1, color2;
 	
@@ -62,11 +63,8 @@ class Alert : public Menu{
 			}else{
 				this->Animation();
 				if(this->width < 1 && this->height < 1){
-					switch(previousGameState){
-						default: 
-							game->ChangeGameState(-1, NULL); 
-							break;
-					}
+					game->ChangeGameState(this->previousGameState, this->previousMenu);
+					delete this;
 				}
 			}
 		}
@@ -83,6 +81,7 @@ class Alert : public Menu{
 		this->color1 = sf::Color(82,181,139,255);
 		this->color2 = sf::Color(200,200,200,255);
 		this->previousGameState = game->gamestate;
+		this->previousMenu = game->currentMenu;
 		
 		int maxCharPerLine=(int)(2*(this->maxWidth-(2*this->borderDim))/charSize);
 		int lines=1+(int)(stringa.length()/maxCharPerLine);
