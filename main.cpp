@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <fstream> 
 
 #include <SFML/Graphics.hpp>
 
@@ -17,11 +18,11 @@ int main(){
 	sf::RenderWindow window(sf::VideoMode(game.windowWidth, game.windowHeight), "simpleXcpp");
 	window.setFramerateLimit(game.frameLimit);
 	window.setView(calcViewWhenResized(window.getSize(), sf::Vector2u(game.windowWidth, game.windowHeight)));
-
-	Livello level;
-	level.LoadLevel("<proprieta;1100;300;0.65;0.86><blocco;0;240;360;20;15;52;61;255;><blocco;50;124;60;30;255;52;61;255;><blocco;1000;250;100;50;0;200;255;255;>");
 	
-	Player player = Player(&game);
+	Player player (&game);
+
+	Livello level (&game);
+	level.LoadLevel("./levels/test1");
 
 	//game loop
 	while (window.isOpen()){
