@@ -21,7 +21,7 @@ int main(){
 	
 	Player player (&game);
 
-	Livello level (&game);
+	Livello level (&game, &player);
 	level.LoadLevel("./levels/test1");
 
 	//game loop

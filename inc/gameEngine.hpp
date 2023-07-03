@@ -1,3 +1,11 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include <fstream> 
+
+#include <SFML/Graphics.hpp>
+
 class GameEngine {
  public:
 	bool debugMode = false;
@@ -15,10 +23,7 @@ class GameEngine {
 	//stato 5: nel menu carica partita - var nelMenuCaricaPartita=false; 
 	//stato 6: menu Mappa - map menu
 	
-	void ChangeGameState(int newGameState, void* newMenu){
-		this->currentMenu=newMenu;
-		this->gamestate=newGameState;
-	}
+	void ChangeGameState(int newGameState, void* newMenu);
 
 	//input key settings
 	int ultimoTastoLetto;
@@ -48,21 +53,8 @@ class GameEngine {
 	 	{sf::Keyboard::D,	sf::Keyboard::L},
 	 	{sf::Keyboard::C,	sf::Keyboard::R}
 	};
-	void updateKeys(sf::Keyboard::Key keyInput, bool isPressed){
-		for (int keyIndex=0; keyIndex < sizeof(keys)/sizeof(bool); keyIndex++){
-			if(keyInput==keySettings[keyIndex][0] || keyInput==keySettings[keyIndex][1]){
-				if(isPressed){
-					keys[keyIndex]=true;
-					ultimoTastoLetto=keyIndex;
-				}else{
-					keys[keyIndex]=false;
-				}
-			}
-		}
-	}
+	void updateKeys(sf::Keyboard::Key keyInput, bool isPressed);
 
 	//costructor
-	GameEngine(){
-		if(!this->font.loadFromFile("res/font/PixelOperatorMono.ttf")){/*error loading fonts*/}
-	}
+	GameEngine();
 };
