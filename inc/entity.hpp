@@ -12,14 +12,15 @@ class Level;
 class Entity {
  public:
  	bool isActive = true;
-	int x, y, width, height;
+	float x, y;
+	int width, height;
 	float xv=0, yv=0; //momentum
 	std::string id;
 	virtual void Physics(Player* player);
 	virtual void Render(sf::RenderWindow* window);
 	virtual ~Entity();
 	Entity ();
- 	Entity (int x, int y, int width, int height);
+ 	Entity (float x, float y, int width, int height);
 };
 
 class Blocco : public Entity{

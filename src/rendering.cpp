@@ -70,7 +70,7 @@ void RenderGameScreen(GameEngine* game, Player* player, Livello* level, sf::Rend
 		Entity screen = Entity(window->getView().getCenter().x-game->windowWidth/2, window->getView().getCenter().y-game->windowHeight/2, game->windowWidth, game->windowHeight);
 		for(int i=0; i < level->contaEntity; i++){
 			if(level->entity[i]->isActive){
-			if(VerifyCollision(&screen, level->entity[i])){
+			if(CollisionBetween(&screen, level->entity[i])){
 				level->entity[i]->Render(window);
 			}
 			}

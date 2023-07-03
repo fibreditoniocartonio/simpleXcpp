@@ -6,7 +6,7 @@ void Entity::Physics(Player* player) {}
 void Entity::Render(sf::RenderWindow* window){}
 Entity::~Entity() {}
 Entity::Entity (){}
-Entity::Entity (int x, int y, int width, int height){
+Entity::Entity (float x, float y, int width, int height){
 	this->x=x; this->y=y; this->width=width; this->height=height;
 }
 

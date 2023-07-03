@@ -11,8 +11,6 @@ class GameEngine;
 class Player;
 class Livello;
 
-bool VerifyCollision(Entity* e1, Entity* e2);
-
-int CollisionBetween(Entity* e1, Entity* e2);
+bool CollisionBetween(Entity* e1, Entity* e2);
 
 void DoGamePhysics(GameEngine* game, Player* player, Livello* level, sf::RenderWindow* window);

@@ -13,7 +13,6 @@ class GameEngine;
 
 class Player : public Entity{
  public:
-	int width=20, height=24;
 	float speed=0.5;
 	float jumpHeight=10;
 	bool giaSaltato=false;
