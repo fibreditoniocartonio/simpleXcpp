@@ -13,6 +13,7 @@ class Entity {
  public:
  	bool isActive = true;
 	int x, y, width, height;
+	float xv=0, yv=0; //momentum
 	std::string id;
 	virtual void Physics(Player* player);
 	virtual void Render(sf::RenderWindow* window);
