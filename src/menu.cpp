@@ -71,13 +71,35 @@ Alert::Alert(GameEngine* game, int charSize, std::string stringa){
 		this->color2 = sf::Color(200,200,200,255);
 		this->previousGameState = game->gamestate;
 		this->previousMenu = game->currentMenu;
-		
+        
+        std::string finalString = "";	
 		int maxCharPerLine=(int)(2*(this->maxWidth-(2*this->borderDim))/charSize);
-		int lines=1+(int)(stringa.length()/maxCharPerLine);
-		std::string finalString=stringa.substr(0, maxCharPerLine);
-		for(int i=1; i < lines; i++){
-			finalString +="\n"+stringa.substr(i*maxCharPerLine, maxCharPerLine);
+        int charNum = 1;
+		for(int i=0; i < stringa.length(); i++){
+            finalString += stringa[i];
+            charNum++;
+            if(std::isspace(stringa[i])){
+                if(stringa[i]=='\n'){
+                    charNum=1;
+                }else{            
+                int verifySpace = charNum;
+                    for(int j=i+1; j < stringa.length(); j++){
+                        verifySpace++;
+                        if(verifySpace > maxCharPerLine){
+                            charNum = verifySpace+1;
+                        }
+                        if(std::isspace(stringa[j])){
+                            j = stringa.length();
+                        }                    
+                    }
+                }
+            }
+            if(charNum > maxCharPerLine){
+                finalString += "\n";
+                charNum=1;
+            }    
 		}
+        
 		this->testo = sf::Text(finalString, game->font, charSize);
 		this->testo.setFillColor(sf::Color::White);
 		game->ChangeGameState(1, this);

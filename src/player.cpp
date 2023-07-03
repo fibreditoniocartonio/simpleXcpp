@@ -92,7 +92,7 @@ void Player::Physics(GameEngine* game, Livello* level){
 		}
 
 		if(game->keys[7]){
-			Alert* alert = new Alert(game, 16, "You found you can open the menu with     ENTER and ESCAPE? Very nice.            \nHere are some other buttons:            \nMove left   -  ArrowLeft & Numpad4       Move right  -  ArrowRight & Numpad6      Jump        -  Z & Space                 Dash        -  X & LShift");
+            Alert* alert = new Alert(game, 16, "You found you can open the menu with ENTER and ESCAPE? Very nice.\n\nHere are some other buttons:\nMove left   -  ArrowLeft & Numpad4\nMove right  -  ArrowRight & Numpad6\nJump        -  Z & Space\nDash        -  X & LShift\n\nYou can even do a walljump by pressing Jump while in contact with a wall.\nNice cock btw");
 		}
 } 
 
