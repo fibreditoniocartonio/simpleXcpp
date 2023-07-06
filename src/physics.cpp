@@ -18,6 +18,49 @@ bool CollisionBetween(Entity* e1, Entity* e2){
 	}
 }
 
+int ResolveCollision(Entity* entity, Entity* obstacle){
+    //thanks to https://youtu.be/watch?v=7ASnv0y2pGU that made me understand the AABB way
+    float xEntry, yEntry, xEntryTime, yEntryTime; 
+    float xExit, yExit, xExitTime, yExitTime;
+    if(entity->xv > 0){
+        xEntry = obstacle->x - (entity->x + entity->width);
+        xExit = (obstacle->x + obstacle->width) - entity->x;
+    }else{
+        xEntry = entity->x - (obstacle->x + obstacle->width);
+        xExit = (entity->x + entity->width) - obstacle->x;  
+    }
+    xEntryTime = std::abs(xEntry / entity->xv);
+    xExitTime = std::abs(xExit / entity->xv);    
+    if(entity->yv > 0){
+        yEntry = obstacle->y - (entity->y + entity->height);
+        yExit = (obstacle->y + obstacle->height) - entity->y;
+
+    }else{
+        yEntry = entity->y - (obstacle->y + obstacle->height);
+        yExit = (entity->y + entity->height) - obstacle->y;      
+    }
+    yEntryTime = std::abs(yEntry / entity->yv);
+    yExitTime = std::abs(yExit / entity->yv);      
+    
+    if(xExitTime < xEntryTime && yExitTime < yEntryTime){
+        //there was no collision
+        return -1;
+    }else{
+
+        if(xEntryTime < yEntryTime){
+            //vertical axis collision (x)
+            entity->x += xEntry;           
+            entity->xv = 0;
+            return 1;
+        }else{
+            //horizontal axis collision (y)
+            entity->y += yEntry;
+            entity->yv = 0;
+            return 2;
+        }
+    }
+}
+
 void DoGamePhysics(GameEngine* game, Player* player, Livello* level, sf::RenderWindow* window){
 	switch (game->gamestate){
 	 case 1: static_cast<Alert*>(game->currentMenu)->Physics(game);

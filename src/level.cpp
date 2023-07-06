@@ -19,6 +19,7 @@
 		if(!fileLivello.is_open()){
 			Alert* alert = new Alert(game, 16, "Error while opening the file at:\n"+filePath); 
 		}else{
+            this->currentLevelFile=filePath;
 			while(fileLivello){
 				stringaLivello += fileLivello.get();
 			} //Alert* alert = new Alert(game, 16, stringaLivello); //show the string read from the file
@@ -52,6 +53,8 @@
 		for(int i=0; i < this->contaEntity; i++){
 			delete this->entity[i];
 		}
+        std::vector<Entity*> nuovoVettore;
+        this->entity=nuovoVettore;
 		this->contaEntity=0;
 	}
 

@@ -23,6 +23,11 @@ class Entity {
  	Entity (float x, float y, int width, int height);
 };
 
+class AABB : public Entity{
+ public:
+    AABB(Entity* e1);
+};
+
 class Blocco : public Entity{
  public:
 	sf::RectangleShape shape;

@@ -42,13 +42,13 @@ int main(){
 			if (event.type == sf::Event::KeyReleased){
 				game.updateKeys(event.key.code, false);
 			}
-        	}
-		
-		//Physics
-		DoGamePhysics(&game, &player, &level, &window);
+        	}	
 
 		//Rendering
 		RenderGameScreen(&game, &player, &level, &window);
+        
+		//Physics
+		DoGamePhysics(&game, &player, &level, &window);        
 	}
 	return 0;
 }

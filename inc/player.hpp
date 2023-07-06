@@ -13,8 +13,9 @@ class GameEngine;
 
 class Player : public Entity{
  public:
-	float speed=0.5;
-	float jumpHeight=10;
+    const float speedDefault = 0.5;
+    float speed = speedDefault;
+	float jumpHeight=8;
 	bool giaSaltato=false;
 	
 	sf::RectangleShape shape;

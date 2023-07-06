@@ -15,6 +15,7 @@ class Livello {
 	GameEngine* game;
     Player* player;
 	std::vector<Entity*> entity;
+    std::string currentLevelFile = "";
 	int contaEntity=0;
 	int maxWidth, maxHeight;
 	float gravity, friction;
