@@ -38,11 +38,18 @@ int main(){
 			//read input events
 			if (event.type == sf::Event::KeyPressed){
 				game.updateKeys(event.key.code, true);
-			}
-			if (event.type == sf::Event::KeyReleased){
+			}else if (event.type == sf::Event::KeyReleased){
 				game.updateKeys(event.key.code, false);
-			}
-        	}	
+			}else if (event.type == sf::Event::JoystickDisconnected){
+				new Alert (&game, 16, "Joystick "+std::to_string(event.joystickConnect.joystickId)+" disconnected.\n("+game.joystick.getIdentification(event.joystickConnect.joystickId).name+")\n\nPress any button to resume the game.");
+			} else if (event.type == sf::Event::JoystickMoved){
+				game.updateKeysJoystick(game.joystickHandler.GetAxisKey(&event), true);
+			}else if (event.type == sf::Event::JoystickButtonPressed){
+				game.updateKeysJoystick(event.joystickButton.button, true);
+			}else if (event.type == sf::Event::JoystickButtonReleased){
+				game.updateKeysJoystick(event.joystickButton.button, false);
+			}                                                
+       	}
 
 		//Rendering
 		RenderGameScreen(&game, &player, &level, &window);

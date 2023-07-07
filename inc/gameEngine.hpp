@@ -6,12 +6,21 @@
 
 #include <SFML/Graphics.hpp>
 
+class JoystickHandler {
+ public:
+    int keySettings [11] = {0,1,2,3,4,5,6,7,8,9,10};
+    int axisDeadZone = 30;
+    int GetAxisKey(sf::Event* evento);
+};
+
 class GameEngine {
  public:
 	bool debugMode = false;
 	const int frameLimit = 60;
 	const int windowWidth=360, windowHeight=270;
 	sf::Font font;
+    sf::Joystick joystick;
+    JoystickHandler joystickHandler;
 	
 	int gamestate = -1;
 	void* currentMenu = NULL;
@@ -53,7 +62,9 @@ class GameEngine {
 	 	{sf::Keyboard::D,	sf::Keyboard::L},
 	 	{sf::Keyboard::C,	sf::Keyboard::R}
 	};
-	void updateKeys(sf::Keyboard::Key keyInput, bool isPressed);
+	
+    void updateKeys(sf::Keyboard::Key keyInput, bool isPressed);    
+    void updateKeysJoystick(int buttonInput, bool isPressed);
 
 	//costructor
 	GameEngine();
