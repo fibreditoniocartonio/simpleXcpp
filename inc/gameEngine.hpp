@@ -8,7 +8,7 @@
 
 class JoystickHandler {
  public:
-    int keySettings [11] = {0,1,2,3,4,5,6,7,8,9,10};
+    int keySettings [11] = {68,67,34,35,2,1,3,9,8,4,5};
     int axisDeadZone = 30;
     int GetAxisKey(sf::Event* evento);
 };

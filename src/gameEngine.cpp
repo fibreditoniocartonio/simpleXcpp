@@ -3,11 +3,11 @@
 
 int JoystickHandler::GetAxisKey(sf::Event* evento){
     if(evento->joystickMove.position > this->axisDeadZone){
-        return (33+evento->joystickMove.axis+1);
+        return (33*(evento->joystickMove.axis+1)+1);
     }else if(evento->joystickMove.position < -this->axisDeadZone){
-        return (33+evento->joystickMove.axis+2);
+        return (33*(evento->joystickMove.axis+1)+2);
     }else{
-        return -(33+evento->joystickMove.axis);
+        return -(33*(evento->joystickMove.axis+1));
     }
     return -1;
 }
