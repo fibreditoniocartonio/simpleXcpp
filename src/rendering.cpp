@@ -64,7 +64,8 @@ void RenderGameScreen(GameEngine* game, Player* player, Livello* level, sf::Rend
 	switch (game->gamestate){
 	 case 1: static_cast<Alert*>(game->currentMenu)->Render(window);
 		break;
-
+	 case 3: static_cast<SettingsMenu*>(game->currentMenu)->Render(window);
+		break;
 	 default: //usually -1, in game
 		//render level
 		Entity screen = Entity(window->getView().getCenter().x-game->windowWidth/2, window->getView().getCenter().y-game->windowHeight/2, game->windowWidth, game->windowHeight);

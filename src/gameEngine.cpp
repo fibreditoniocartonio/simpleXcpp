@@ -17,7 +17,7 @@ void GameEngine::ChangeGameState(int newGameState, void* newMenu){
 		this->gamestate=newGameState;
 }
 
-void GameEngine::updateKeys(sf::Keyboard::Key keyInput, bool isPressed){
+void GameEngine::UpdateKeys(sf::Keyboard::Key keyInput, bool isPressed){
 		for (int keyIndex=0; keyIndex < sizeof(this->keys)/sizeof(bool); keyIndex++){
 			if(keyInput==this->keySettings[keyIndex][0] || keyInput==this->keySettings[keyIndex][1]){
 				if(isPressed){
@@ -30,10 +30,10 @@ void GameEngine::updateKeys(sf::Keyboard::Key keyInput, bool isPressed){
 		}
 }
 
-void GameEngine::updateKeysJoystick(int keyInput, bool isPressed){
+void GameEngine::UpdateKeysJoystick(int keyInput, bool isPressed){
 	for (int keyIndex=0; keyIndex < sizeof(this->keys)/sizeof(bool); keyIndex++){
         if(keyInput>0){
-		  if(keyInput==this->joystickHandler.keySettings[keyIndex]){
+		  if(keyInput==this->joystickHandler.keySettings[keyIndex][0] || keyInput==this->joystickHandler.keySettings[keyIndex][1]){
 			 if(isPressed){
 				this->keys[keyIndex]=true;
 				this->ultimoTastoLetto=keyIndex;
@@ -43,16 +43,25 @@ void GameEngine::updateKeysJoystick(int keyInput, bool isPressed){
 		  }
         }else{
             //axis deadzone
-            if((1-keyInput)==this->joystickHandler.keySettings[keyIndex] || (2-keyInput)==this->joystickHandler.keySettings[keyIndex]){
+            if((1-keyInput)==this->joystickHandler.keySettings[keyIndex][0] || (2-keyInput)==this->joystickHandler.keySettings[keyIndex][0] || (1-keyInput)==this->joystickHandler.keySettings[keyIndex][1] || (2-keyInput)==this->joystickHandler.keySettings[keyIndex][1]){
                 this->keys[keyIndex]=false;
             }
         }
 	}    
 }
 
+void  GameEngine::BindNewKeyKB(sf::Keyboard::Key keyInput){
+	this->keySettings[this->newKeyIndex[0]][this->newKeyIndex[1]] = keyInput;
+	this->listenNewKey = -1;
+}
+void  GameEngine::BindNewKeyJS(int keyInput){
+	this->joystickHandler.keySettings[this->newKeyIndex[0]][this->newKeyIndex[1]] = keyInput;
+	this->listenNewKey = -1;
+}
+
 //costructor
 GameEngine::GameEngine(){
-		if(!this->font.loadFromFile("res/font/PixelOperatorMono.ttf")){/*error loading fonts*/}
+	if(!this->font.loadFromFile("res/font/PixelOperatorMono.ttf")){/*error loading fonts*/}
         //this->font.setSmooth(false); //require SFML 2.6 and I only have 2.5.1 on gentoo
 }
 

@@ -26,9 +26,9 @@ class Menu {
 class Alert : public Menu{
  public:
 	int previousGameState, borderDim;
-	void* previousMenu;
 	sf::Text testo;
 	sf::Color color1, color2;
+	void* previousMenu;
 	
 	void Render(sf::RenderWindow* window) override;
 
@@ -36,4 +36,23 @@ class Alert : public Menu{
 
 	//constructor
 	Alert(GameEngine* game, int charSize, std::string stringa);
+};
+
+
+class SettingsMenu : public Menu{
+ public:
+	int previousGameState, borderDim, index, maxIndex;
+	bool tastoGiaSchiacciato, listenNewKey;
+	sf::Text testo;
+	sf::Color color1, color2;
+	void* previousMenu;
+	GameEngine* game;
+	int state; //0: main setting menu, 1:keyboard settings, 2:gamepad settings
+	
+	void Render(sf::RenderWindow* window) override;
+
+	void Physics(GameEngine* game) override;
+
+	//constructor
+	SettingsMenu(GameEngine* game);
 };

@@ -55,24 +55,26 @@ void Player::Physics(GameEngine* game, Livello* level){
         
         //apply movement     
         this->x += this->xv;
-		this->y += this->yv;      
+	this->y += this->yv;      
         
-		if(!game->keys[4]){
-			this->giaSaltato=false;
-		}
+	if(!game->keys[4]){
+		this->giaSaltato=false;
+	}
 
-		if(game->keys[7]){
-			//new Alert(game, 16, "You found you can open the menu with ENTER and ESCAPE? Very nice.\n\nHere are some other buttons:\nMove left   -  ArrowLeft & Numpad4\nMove right  -  ArrowRight & Numpad6\nJump        -  Z & Space\nDash        -  X & LShift\n\nYou can even do a walljump by pressing Jump while in contact with a wall.");
-            this->xv=0; this->yv=0;
-            new Alert(game, 16, "Reloading Level: "+level->currentLevelFile);
-            level->LoadLevel(level->currentLevelFile);
-		}
+	if(game->keys[7]){
+		//new Alert(game, 16, "You found you can open the menu with ENTER and ESCAPE? Very nice.\n\nHere are some other buttons:\nMove left   -  ArrowLeft & Numpad4\nMove right  -  ArrowRight & Numpad6\nJump        -  Z & Space\nDash        -  X & LShift\n\nYou can even do a walljump by pressing Jump while in contact with a wall.");
+	        /*this->xv=0; this->yv=0;
+        	new Alert(game, 16, "Reloading Level: "+level->currentLevelFile);
+	        level->LoadLevel(level->currentLevelFile);
+		*/
+        	new SettingsMenu(game);
+	}
 } 
 
 void Player::Render(sf::RenderWindow* window){
-		this->shape.setPosition((int)this->x, (int)this->y);
+	this->shape.setPosition((int)this->x, (int)this->y);
         window->draw(this->shape);
-		//this->text.setString(("X: "+std::to_string((int)this->x)+"\tY: "+std::to_string((int)this->y)+"\nXV: "+std::to_string(this->xv)+"\tYV: "+std::to_string(this->yv)));
+	//this->text.setString(("X: "+std::to_string((int)this->x)+"\tY: "+std::to_string((int)this->y)+"\nXV: "+std::to_string(this->xv)+"\tYV: "+std::to_string(this->yv)));
         //this->text.setPosition((int)this->x, (int)this->y-16);
-		//window->draw(this->text);
+	//window->draw(this->text);
 }

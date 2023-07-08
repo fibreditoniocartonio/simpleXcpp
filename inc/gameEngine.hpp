@@ -8,7 +8,7 @@
 
 class JoystickHandler {
  public:
-    int keySettings [11] = {68,67,34,35,2,1,3,9,8,4,5};
+    int keySettings [11][2] = {{68,-1},{67,-1},{34,-1},{35,-1},{2,-1},{1,-1},{3,-1},{9,-1},{8,-1},{4,-1},{5,-1}};
     int axisDeadZone = 30;
     int GetAxisKey(sf::Event* evento);
 };
@@ -16,11 +16,13 @@ class JoystickHandler {
 class GameEngine {
  public:
 	bool debugMode = false;
+	int listenNewKey = -1;
+	int newKeyIndex [2];
 	const int frameLimit = 60;
 	const int windowWidth=360, windowHeight=270;
 	sf::Font font;
-    sf::Joystick joystick;
-    JoystickHandler joystickHandler;
+    	sf::Joystick joystick;
+	JoystickHandler joystickHandler;
 	
 	int gamestate = -1;
 	void* currentMenu = NULL;
@@ -57,14 +59,16 @@ class GameEngine {
 	 	{sf::Keyboard::Z,	sf::Keyboard::Space},
 	 	{sf::Keyboard::X,	sf::Keyboard::LShift},
 	 	{sf::Keyboard::A,	sf::Keyboard::LControl},
-	 	{sf::Keyboard::Enter,	sf::Keyboard::Escape},
+	 	{sf::Keyboard::Enter,	sf::Keyboard::F1},
 	 	{sf::Keyboard::RShift,	sf::Keyboard::M},
 	 	{sf::Keyboard::D,	sf::Keyboard::L},
 	 	{sf::Keyboard::C,	sf::Keyboard::R}
 	};
 	
-    void updateKeys(sf::Keyboard::Key keyInput, bool isPressed);    
-    void updateKeysJoystick(int buttonInput, bool isPressed);
+	void UpdateKeys(sf::Keyboard::Key keyInput, bool isPressed);    
+	void UpdateKeysJoystick(int keyInput, bool isPressed);
+	void BindNewKeyKB(sf::Keyboard::Key keyInput);
+	void BindNewKeyJS(int keyInput);
 
 	//costructor
 	GameEngine();
