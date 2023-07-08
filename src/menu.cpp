@@ -52,13 +52,22 @@ void Alert::Physics(GameEngine* game){
 			if(this->width == this->maxWidth && this->height == this->maxHeight){this->isOpen=true;}
 		}else{
 			if(!this->isClosing){
-				//read input
-				for(int i=0; i<11; i++){
-					if(game->keys[i]){this->isClosing=true;}
+				if(this->timer>0){
+					this->timer--;
+				}else{
+					for(int i=0; i<11; i++){
+						//read input to close the Alert
+						if(game->keys[i]){this->isClosing=true;}
+					}
 				}
 			}else{
-				this->Animation();
-				if(this->width < 1 && this->height < 1){
+				if(this->previousGameState == -1){
+					this->Animation();
+					if(this->width < 1 && this->height < 1){
+						game->ChangeGameState(this->previousGameState, this->previousMenu);
+						delete this;
+					}
+				}else{
 					game->ChangeGameState(this->previousGameState, this->previousMenu);
 					delete this;
 				}
@@ -66,10 +75,17 @@ void Alert::Physics(GameEngine* game){
 		}
 }
 Alert::Alert(GameEngine* game, int charSize, std::string stringa){
-	this->width=0;
-	this->height=0;
 	this->maxWidth=game->windowWidth;
 	this->maxHeight=game->windowHeight;
+	if(game->gamestate != -1){
+		this->timer = 5;
+		this->width = this->maxWidth;
+		this->height = this->maxHeight;
+	}else{
+		this->timer = 0;
+		this->width=0;
+		this->height=0;
+	}
 	this->borderDim=16;
 	this->speed=14;
 	this->color1 = sf::Color(82,181,139,255);
@@ -188,9 +204,6 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 				this->testo.setFillColor(sf::Color::White);
 				this->testo.setPosition(sf::Vector2f(x+borderDim/2, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
 				switch(i){
-				 /*Require SFML 2.6 that i currentlu don't have
-				 case 0:  txtString = " Up:\t"+sf::Keyboard().getDescription(game->keySettings[i][0])+"\t"+sf::Keyboard().getDescription(game->keySettings[i][1]); break;
-				 */
 				 case 0:  this->testo.setString(" Up:"); break;
 				 case 1:  this->testo.setString(" Down:"); break;
 				 case 2:  this->testo.setString(" Right:"); break;
@@ -216,6 +229,63 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 		 	break;
 
 		 case 2: //gamepad settings menu
+			this->testo.setCharacterSize(32);
+			this->testo.setString("GAMEPAD BINDINGS");
+			this->testo.setFillColor(sf::Color(255,0,0,255));
+			AlignCenter(&this->testo);
+			this->testo.setPosition(sf::Vector2f(x+this->width/2, y+this->borderDim/2));
+			window->draw(this->testo);
+			this->testo.setCharacterSize(16);
+			AlignLeft(&this->testo);
+			for(int i=0; i<(this->maxIndex-1)/2+1; i++){
+				if(i<(this->maxIndex-1)/2){
+				  for(int j=0; j<2; j++){
+					this->testo.setPosition(sf::Vector2f(x+(j+1)*this->width/3, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
+					std::string keyBinded;
+					if(game->joystickHandler.keySettings[i][j] == -1){
+						keyBinded = "-"; //not bound
+					}else{
+						keyBinded = std::to_string(game->joystickHandler.keySettings[i][j]);
+					}
+					if(this->index == i+j*(this->maxIndex-1)/2){
+						if(this->game->listenNewKey != 2){
+							this->testo.setString(">"+keyBinded);
+						}else{
+							this->testo.setString(">__");
+						}
+						this->testo.setFillColor(sf::Color(255,0,0,255));
+					}else{
+						this->testo.setString(" "+keyBinded);
+						this->testo.setFillColor(sf::Color::White);
+					}
+					window->draw(this->testo);
+				  }
+				}
+				this->testo.setFillColor(sf::Color::White);
+				this->testo.setPosition(sf::Vector2f(x+borderDim/2, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
+				switch(i){
+				 case 0:  this->testo.setString(" Up:"); break;
+				 case 1:  this->testo.setString(" Down:"); break;
+				 case 2:  this->testo.setString(" Right:"); break;
+				 case 3:  this->testo.setString(" Left:"); break;
+				 case 4:  this->testo.setString(" Jump:"); break;
+				 case 5:  this->testo.setString(" Dash:"); break;
+				 case 6:  this->testo.setString(" Attack:"); break;
+				 case 7:  this->testo.setString(" Start:"); break;
+				 case 8:  this->testo.setString(" Map:"); break;
+				 case 9:  this->testo.setString(" L key:"); break;
+				 case 10: this->testo.setString(" R key:"); break;
+				 default:
+				 	if(this->index == this->maxIndex-1){
+						this->testo.setString(">Close this menu");
+						this->testo.setFillColor(sf::Color(255,0,0,255));
+					}else{
+						this->testo.setString(" Close this menu");
+					}
+					break;
+				}
+				window->draw(this->testo);
+			}
 		 	break;
 
 		 default: break;
@@ -231,6 +301,7 @@ void SettingsMenu::Physics(GameEngine* game){
 		}else{
 			if(!this->isClosing){ //menu is open
 				int currentState = this->state;
+				bool tastiPremuti = false;
 				switch(this->state){
 				 case 0: //main settings menu
 				 	this->maxIndex=3;
@@ -275,6 +346,8 @@ void SettingsMenu::Physics(GameEngine* game){
 							}
 							game->listenNewKey=1;
 							this->listenNewKey=false;
+						}else{
+							tastiPremuti=true; //don't read input in this menu until a new key is bound
 						}
 					}
 				 	break;
@@ -283,6 +356,9 @@ void SettingsMenu::Physics(GameEngine* game){
 				 	this->maxIndex=23;
 					if(!this->listenNewKey && game->listenNewKey != 2){
 						if(game->keys[4] && !this->tastoGiaSchiacciato){this->index=this->state-1; this->state=0;}
+						if((game->keys[0] && this->index == (this->maxIndex-1)/2) && !this->tastoGiaSchiacciato){this->index = this->maxIndex;}
+						if((game->keys[0] && this->index == this->maxIndex-1) && !this->tastoGiaSchiacciato){this->index = (this->maxIndex-1)/2;}
+						if((game->keys[1] && this->index == (this->maxIndex-1)/2-1) && !this->tastoGiaSchiacciato){this->index = this->maxIndex-2;}
 						if((game->keys[2] || game->keys[3] )&& !this->tastoGiaSchiacciato){
 							if(this->index < (this->maxIndex-1)/2){ 
 								this->index += (this->maxIndex-1)/2;
@@ -294,7 +370,13 @@ void SettingsMenu::Physics(GameEngine* game){
 							if(this->index == this->maxIndex-1){
 								this->index=this->state-1; this->state=0;
 							}else{
-								this->listenNewKey = true;
+								bool atLeastOneJoystickIsConnected = false;
+								for(int i=0; i < 8; i++){ if(sf::Joystick::isConnected(i)){ atLeastOneJoystickIsConnected=true; } }
+								if(atLeastOneJoystickIsConnected){
+									this->listenNewKey = true;
+								}else{
+									new Alert(game, 16, "No gamepad connected or found.\n\nWithout a gamepad connected it's impossible to bind new keys.");
+								}
 							}
 						}
 					}else{
@@ -306,6 +388,8 @@ void SettingsMenu::Physics(GameEngine* game){
 							}
 							game->listenNewKey=2;
 							this->listenNewKey=false;
+						}else{
+							tastiPremuti=true; //don't read input in this menu until a new key is bound
 						}
 					}
 				 	break;
@@ -320,13 +404,17 @@ void SettingsMenu::Physics(GameEngine* game){
 				}
 				if(this->index > this->maxIndex-1){this->index = 0;}
 				if(this->index < 0){this->index = this->maxIndex-1;}
-				bool tastiPremuti = false;
 				for(int i=0; i<11; i++){ if(game->keys[i]){tastiPremuti=true;} }
 				this->tastoGiaSchiacciato=tastiPremuti;
 				if(currentState != this->state){this->Physics(game);} //update maxIndex to avoid rendering issues
 			}else{ //menu is closing
-				this->Animation();
-				if(this->width < 1 && this->height < 1){
+				if(this->previousGameState == -1){
+					this->Animation();
+					if(this->width < 1 && this->height < 1){
+						game->ChangeGameState(this->previousGameState, this->previousMenu);
+						delete this;
+					}
+				}else{
 					game->ChangeGameState(this->previousGameState, this->previousMenu);
 					delete this;
 				}

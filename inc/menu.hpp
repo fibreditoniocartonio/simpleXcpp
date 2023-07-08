@@ -25,7 +25,7 @@ class Menu {
 
 class Alert : public Menu{
  public:
-	int previousGameState, borderDim;
+	int previousGameState, borderDim, timer;
 	sf::Text testo;
 	sf::Color color1, color2;
 	void* previousMenu;
