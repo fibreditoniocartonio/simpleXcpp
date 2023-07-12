@@ -5,6 +5,7 @@
 #include <fstream> 
 
 #include <SFML/Graphics.hpp>
+#include "gameVersion.hpp"
 
 class JoystickHandler {
  public:
@@ -24,7 +25,7 @@ class GameEngine {
     	sf::Joystick joystick;
 	JoystickHandler joystickHandler;
 	
-	int gamestate = -1;
+	int gamestate = 2;
 	void* currentMenu = NULL;
 	//stato -1: in partita
 	//stato 1: c'e' un alert aperto - var alertAperto=false; 

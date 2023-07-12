@@ -24,6 +24,8 @@ int main(){
 	Livello level (&game, &player);
 	level.LoadLevel("./levels/test1");
 
+    new MainMenu(&game);
+    
 	//game loop
 	while (window.isOpen()){
 		//read events

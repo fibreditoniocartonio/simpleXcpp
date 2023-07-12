@@ -65,6 +65,8 @@ void DoGamePhysics(GameEngine* game, Player* player, Livello* level, sf::RenderW
 	switch (game->gamestate){
 	 case 1: static_cast<Alert*>(game->currentMenu)->Physics(game);
 		break;
+     case 2: static_cast<MainMenu*>(game->currentMenu)->Physics(game);
+		break;        
 	 case 3: static_cast<SettingsMenu*>(game->currentMenu)->Physics(game);
 		break;
 	 default: //usually -1, in game

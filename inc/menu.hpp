@@ -8,6 +8,7 @@
 
 class GameEngine;
 
+
 class Menu {
  public:
 	int width, height, maxWidth, maxHeight, speed;
@@ -23,36 +24,46 @@ class Menu {
 };
 
 
-class Alert : public Menu{
+class Alert : public Menu{  //gamestate 1
  public:
 	int previousGameState, borderDim, timer;
 	sf::Text testo;
 	sf::Color color1, color2;
 	void* previousMenu;
-	
 	void Render(sf::RenderWindow* window) override;
-
 	void Physics(GameEngine* game) override;
-
 	//constructor
 	Alert(GameEngine* game, int charSize, std::string stringa);
 };
 
 
-class SettingsMenu : public Menu{
+class MainMenu : public Menu{   //gamestate 2
+ public:
+	int previousGameState, index, maxIndex;
+	bool tastoGiaSchiacciato=true, exitGame=false;
+	sf::Text testo;
+    sf::Texture titleScreenImg;
+    sf::Sprite titleScreenSprite;
+	void* previousMenu;
+	GameEngine* game;
+	void Render(sf::RenderWindow* window) override;
+	void Physics(GameEngine* game) override;
+	//constructor
+	MainMenu(GameEngine* game);
+};
+
+
+class SettingsMenu : public Menu{   //gamestate 3
  public:
 	int previousGameState, borderDim, index, maxIndex;
-	bool tastoGiaSchiacciato, listenNewKey;
+	bool tastoGiaSchiacciato=true, listenNewKey;
 	sf::Text testo;
 	sf::Color color1, color2;
 	void* previousMenu;
 	GameEngine* game;
 	int state; //0: main setting menu, 1:keyboard settings, 2:gamepad settings
-	
 	void Render(sf::RenderWindow* window) override;
-
 	void Physics(GameEngine* game) override;
-
 	//constructor
 	SettingsMenu(GameEngine* game);
 };

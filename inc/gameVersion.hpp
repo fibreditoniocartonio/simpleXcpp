@@ -1,1 +1,2 @@
-#define versioneDiGioco "v0.20230708-c27"
+#pragma once
+#define versioneDiGioco "v0.20230712-c28"

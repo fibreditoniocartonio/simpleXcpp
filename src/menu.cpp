@@ -23,7 +23,6 @@ void AlignLeft(sf::Text* text){
 }
 
 
-
 //Alert -> gamestate = 1
 void Alert::Render(sf::RenderWindow* window){
 		sf::RectangleShape rect;
@@ -125,6 +124,113 @@ Alert::Alert(GameEngine* game, int charSize, std::string stringa){
 }
 
 
+//MainMenu -> gamestate = 2
+void MainMenu::Render(sf::RenderWindow* window){
+	int x=(int)(window->getView().getCenter().x - this->width/2);
+	int y=(int)(window->getView().getCenter().y - this->height/2);
+	if(this->isOpen && !this->isClosing){
+        this->titleScreenSprite.setPosition(sf::Vector2f(x,y));
+        window->draw(this->titleScreenSprite);    
+        this->testo.setCharacterSize(32);
+		for(int i=0; i < this->maxIndex; i++){
+			this->testo.setPosition(sf::Vector2f(x+this->width/2, y+this->height/2+this->testo.getCharacterSize()*i));
+			std::string txtString = " ";
+			if(this->index == i){
+				this->testo.setFillColor(sf::Color(216,136,0,255));
+				txtString = ">";
+			}else{
+				this->testo.setFillColor(sf::Color(63,72,255,255));
+			}
+			switch(i){
+			 case 0: txtString+="New Game";
+			 	break;
+			 case 1: txtString+="Settings";
+			 	break;
+			 default: txtString+="Exit";
+			 	break;
+			}
+			this->testo.setString(txtString);
+			window->draw(this->testo);
+		}
+        this->testo.setCharacterSize(16);
+        this->testo.setFillColor(sf::Color::White);
+        this->testo.setPosition(sf::Vector2f(x, y+this->height-this->testo.getCharacterSize()));
+		this->testo.setString(versioneDiGioco);
+		window->draw(this->testo);        
+	}
+    if(this->exitGame){window->close();}
+}
+void MainMenu::Physics(GameEngine* game){
+		if(!this->isOpen){ //menu is opening
+			this->Animation();
+			if(this->width > this->maxWidth){this->width=this->maxWidth;}
+			if(this->height > this->maxHeight){this->height=this->maxHeight;}
+			if(this->width == this->maxWidth && this->height == this->maxHeight){this->isOpen=true;}
+		}else{
+			if(!this->isClosing){ //menu is open
+				bool tastiPremuti = false;
+				if((game->keys[5] || game->keys[7]) && !this->tastoGiaSchiacciato){
+                    switch(this->index){
+                        case 0: //New Game
+                            this->previousGameState = -1; this->previousMenu = NULL;
+                            this->isClosing = true;
+                            break;
+                        case 1: //Settings
+                            new SettingsMenu(game);
+                            break;
+                        default: this->exitGame=true; break; //this flag will make Render() to call window->close()
+                    }
+				}
+				if(game->keys[0] && !this->tastoGiaSchiacciato){
+					this->index--;
+				}
+				if(game->keys[1] && !this->tastoGiaSchiacciato){
+					this->index++;
+				}
+				if(this->index > this->maxIndex-1){this->index = 0;}
+				if(this->index < 0){this->index = this->maxIndex-1;}
+				for(int i=0; i<11; i++){ if(game->keys[i]){tastiPremuti=true;} }
+				this->tastoGiaSchiacciato=tastiPremuti;
+			}else{ //menu is closing
+				if(this->previousGameState == -1){
+					this->Animation();
+					if(this->width < 1 && this->height < 1){
+						game->ChangeGameState(this->previousGameState, this);
+						delete this;
+					}
+				}else{
+					game->ChangeGameState(this->previousGameState, this->previousMenu);
+					delete this;
+				}
+			}
+		}
+}
+MainMenu::MainMenu(GameEngine* game){
+	this->index = 0;
+    this->maxIndex = 3;
+	this->maxWidth=game->windowWidth;
+	this->maxHeight=game->windowHeight;
+	if(game->gamestate != -1){
+		this->width = this->maxWidth;
+		this->height = this->maxHeight;
+	}else{
+		this->width=0;
+		this->height=0;
+	}
+	this->speed=14;
+    if (!this->titleScreenImg.loadFromFile("./res/img/titlescreen/titlescreen.png")){
+        new Alert(game, 16, "Error loading the following resources:\n\n./res/img/titlescreen/titlescreen.png");
+    }
+    this->titleScreenImg.setSmooth(false); //do not blur the pixels
+    this->titleScreenSprite.setTexture(this->titleScreenImg);    
+	this->previousGameState = game->gamestate;
+	this->previousMenu = game->currentMenu;
+	this->testo = sf::Text("", game->font, 32);
+    this->game = game;
+	game->ChangeGameState(2, this);
+} 
+
+
 //SettingsMenu -> gamestate = 3
 void SettingsMenu::Render(sf::RenderWindow* window){
 	sf::RectangleShape rect;
@@ -185,17 +291,18 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 			for(int i=0; i<(this->maxIndex-1)/2+1; i++){
 				if(i<(this->maxIndex-1)/2){
 				  for(int j=0; j<2; j++){
-					this->testo.setPosition(sf::Vector2f(x+(j+1)*this->width/3, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
+					this->testo.setPosition(sf::Vector2f(x+(j*2+1)*this->width/5, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
 					if(this->index == i+j*(this->maxIndex-1)/2){
 						if(this->game->listenNewKey != 1){
 						this->testo.setString(">"+std::to_string(game->keySettings[i][j]));
-						//this->testo.setString(">"+sf::Keyboard().getDescription(game->keySettings[i][j])); //require SFML 2.6 that i dont have
+						//this->testo.setString(">"+sf::Keyboard().getDescription(sf::Keyboard().delocalize(game->keySettings[i][j]))); //require SFML 2.6 that i dont have
 						}else{
 						this->testo.setString(">____________");
 						}
 						this->testo.setFillColor(sf::Color(255,0,0,255));
 					}else{
 						this->testo.setString(" "+std::to_string(game->keySettings[i][j]));
+                        //this->testo.setString(" "+sf::Keyboard().getDescription(sf::Keyboard().delocalize(game->keySettings[i][j]))); //require SFML 2.6 that i dont have
 						this->testo.setFillColor(sf::Color::White);
 					}
 					window->draw(this->testo);
@@ -422,7 +529,7 @@ void SettingsMenu::Physics(GameEngine* game){
 		}
 }
 SettingsMenu::SettingsMenu(GameEngine* game){
-	this->index = 0;
+	this->index = 0; this->maxIndex = 0;
 	this->listenNewKey = false;
 	this->maxWidth=game->windowWidth;
 	this->maxHeight=game->windowHeight;
