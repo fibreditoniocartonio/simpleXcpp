@@ -1,6 +1,9 @@
+.gitignore
 simpleXcpp
 gitpush
 *.o
 *.d
 temp/*
 temp/src/*
+.vscode
+.vscode/*

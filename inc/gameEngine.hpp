@@ -7,6 +7,8 @@
 #include <SFML/Graphics.hpp>
 #include "gameVersion.hpp"
 
+class TextEngine;
+
 class JoystickHandler {
  public:
     int keySettings [11][2] = {{68,-1},{67,-1},{34,-1},{35,-1},{2,-1},{1,-1},{3,-1},{9,-1},{8,-1},{4,-1},{5,-1}};
@@ -24,6 +26,8 @@ class GameEngine {
 	sf::Font font;
     	sf::Joystick joystick;
 	JoystickHandler joystickHandler;
+	TextEngine* textEngine;
+	std::string language;
 	
 	int gamestate = 2;
 	void* currentMenu = NULL;
@@ -70,6 +74,8 @@ class GameEngine {
 	void UpdateKeysJoystick(int keyInput, bool isPressed);
 	void BindNewKeyKB(sf::Keyboard::Key keyInput);
 	void BindNewKeyJS(int keyInput);
+	void SetLanguage(std::string language);
+	void UpdateTextLanguage();
 
 	//costructor
 	GameEngine();

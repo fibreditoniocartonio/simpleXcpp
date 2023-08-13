@@ -1,0 +1,25 @@
+00000-ITALIANO
+00001-Nuova Partita
+00002-Opzioni
+00003-Esci dal Gioco
+00004-Errore durante il caricamento della seguente risorsa:
+00005-OPZIONI
+00006-Impostazioni comandi - Tastiera
+00007-Impostazioni comandi - Gamepad
+00008-Chiudi questo menu
+00009-IMPOSTAZIONI TASTIERA
+00010-IMPOSTAZIONI GAMEPAD
+00011-Su
+00012-Giu
+00013-Destra
+00014-Sinist.
+00015-Salto
+00016-Scatto
+00017-Attacco
+00018-Start
+00019-Mappa
+00020-L key
+00021-R key
+00022-Nessun gamepad connesso o riconosciuto.
+00023-Senza un gamepad connesso e' impossibile assegnare dei nuovi tasti.
+00024-Linguaggio

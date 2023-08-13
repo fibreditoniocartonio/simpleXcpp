@@ -25,7 +25,8 @@ int main(){
 	level.LoadLevel("./levels/test1");
 
     new MainMenu(&game);
-    
+    game.SetLanguage("english.txt"); //read texts from language file
+
 	//game loop
 	while (window.isOpen()){
 		//read events
@@ -60,10 +61,9 @@ int main(){
 				game.UpdateKeysJoystick(event.joystickButton.button, false);
 
 			}                                                
-       		}
+       	}
 		//Physics
 		DoGamePhysics(&game, &player, &level, &window); 
-
 		//Rendering
 		RenderGameScreen(&game, &player, &level, &window);
 	}

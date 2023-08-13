@@ -1,4 +1,5 @@
 #include "../inc/gameEngine.hpp"
+#include "../inc/textEngine.hpp"
 #include "../inc/menu.hpp"
 
 int JoystickHandler::GetAxisKey(sf::Event* evento){
@@ -59,9 +60,19 @@ void  GameEngine::BindNewKeyJS(int keyInput){
 	this->listenNewKey = -1;
 }
 
+void GameEngine::SetLanguage(std::string language){	
+	this->language = language;
+	this->UpdateTextLanguage();
+}
+
+void GameEngine::UpdateTextLanguage(){	
+	this->textEngine->LoadText(this->language);
+}
+
 //costructor
 GameEngine::GameEngine(){
+	this->textEngine = new TextEngine(this);
 	if(!this->font.loadFromFile("res/font/PixelOperatorMono.ttf")){/*error loading fonts*/}
-        //this->font.setSmooth(false); //require SFML 2.6 and I only have 2.5.1 on gentoo
+    //this->font.setSmooth(false); //require SFML 2.6 and I only have 2.5.1 on gentoo
 }
 

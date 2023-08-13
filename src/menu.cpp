@@ -1,5 +1,6 @@
 #include "../inc/menu.hpp"
 #include "../inc/gameEngine.hpp"
+#include "../inc/textEngine.hpp"
 
 void Menu::Physics(GameEngine* game) {}
 void Menu::Render(sf::RenderWindow* window){}
@@ -133,7 +134,7 @@ void MainMenu::Render(sf::RenderWindow* window){
         window->draw(this->titleScreenSprite);    
         this->testo.setCharacterSize(32);
 		for(int i=0; i < this->maxIndex; i++){
-			this->testo.setPosition(sf::Vector2f(x+this->width/2, y+this->height/2+this->testo.getCharacterSize()*i));
+			this->testo.setPosition(sf::Vector2f(x+this->width/3, y+this->height/2+this->testo.getCharacterSize()*i));
 			std::string txtString = " ";
 			if(this->index == i){
 				this->testo.setFillColor(sf::Color(216,136,0,255));
@@ -142,11 +143,11 @@ void MainMenu::Render(sf::RenderWindow* window){
 				this->testo.setFillColor(sf::Color(63,72,255,255));
 			}
 			switch(i){
-			 case 0: txtString+="New Game";
+			 case 0: txtString+=this->game->textEngine->testo[1];
 			 	break;
-			 case 1: txtString+="Settings";
+			 case 1: txtString+=this->game->textEngine->testo[2];
 			 	break;
-			 default: txtString+="Exit";
+			 default: txtString+=this->game->textEngine->testo[3];
 			 	break;
 			}
 			this->testo.setString(txtString);
@@ -219,7 +220,7 @@ MainMenu::MainMenu(GameEngine* game){
 	}
 	this->speed=14;
     if (!this->titleScreenImg.loadFromFile("./res/img/titlescreen/titlescreen.png")){
-        new Alert(game, 16, "Error loading the following resources:\n\n./res/img/titlescreen/titlescreen.png");
+        new Alert(game, 16, this->game->textEngine->testo[4]+"\n\n./res/img/titlescreen/titlescreen.png");
     }
     this->titleScreenImg.setSmooth(false); //do not blur the pixels
     this->titleScreenSprite.setTexture(this->titleScreenImg);    
@@ -250,7 +251,7 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 		switch(this->state){
 		 case 0: //main settings menu
 			this->testo.setCharacterSize(32);
-			this->testo.setString("SETTINGS");
+			this->testo.setString(this->game->textEngine->testo[5]);
 			this->testo.setFillColor(sf::Color(255,0,0,255));
 			AlignCenter(&this->testo);
 			this->testo.setPosition(sf::Vector2f(x+this->width/2, y+this->borderDim/2));
@@ -267,11 +268,13 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 					this->testo.setFillColor(sf::Color::White);
 				}
 				switch(i){
-				 case 0: txtString+="Keyboard binding settings";
+				 case 0: txtString+=this->game->textEngine->testo[6];
 				 	break;
-				 case 1: txtString+="Gamepad binding settings";
+				 case 1: txtString+=this->game->textEngine->testo[7];
 				 	break;
-				 default: txtString+="Close this menu";
+				 case 2: txtString+=this->game->textEngine->testo[24]+": "+this->game->textEngine->testo[0];
+				 	break;
+				 default: txtString+=this->game->textEngine->testo[8];
 				 	break;
 				}
 				this->testo.setString(txtString);
@@ -281,7 +284,7 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 
 		 case 1: //keyboard settings menu
 			this->testo.setCharacterSize(32);
-			this->testo.setString("KEYBOARD BINDINGS");
+			this->testo.setString(this->game->textEngine->testo[9]);
 			this->testo.setFillColor(sf::Color(255,0,0,255));
 			AlignCenter(&this->testo);
 			this->testo.setPosition(sf::Vector2f(x+this->width/2, y+this->borderDim/2));
@@ -311,23 +314,23 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 				this->testo.setFillColor(sf::Color::White);
 				this->testo.setPosition(sf::Vector2f(x+borderDim/2, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
 				switch(i){
-				 case 0:  this->testo.setString(" Up:"); break;
-				 case 1:  this->testo.setString(" Down:"); break;
-				 case 2:  this->testo.setString(" Right:"); break;
-				 case 3:  this->testo.setString(" Left:"); break;
-				 case 4:  this->testo.setString(" Jump:"); break;
-				 case 5:  this->testo.setString(" Dash:"); break;
-				 case 6:  this->testo.setString(" Attack:"); break;
-				 case 7:  this->testo.setString(" Start:"); break;
-				 case 8:  this->testo.setString(" Map:"); break;
-				 case 9:  this->testo.setString(" L key:"); break;
-				 case 10: this->testo.setString(" R key:"); break;
+				 case 0:  this->testo.setString(" "+this->game->textEngine->testo[11]+":"); break;
+				 case 1:  this->testo.setString(" "+this->game->textEngine->testo[12]+":"); break;
+				 case 2:  this->testo.setString(" "+this->game->textEngine->testo[13]+":"); break;
+				 case 3:  this->testo.setString(" "+this->game->textEngine->testo[14]+":"); break;
+				 case 4:  this->testo.setString(" "+this->game->textEngine->testo[15]+":"); break;
+				 case 5:  this->testo.setString(" "+this->game->textEngine->testo[16]+":"); break;
+				 case 6:  this->testo.setString(" "+this->game->textEngine->testo[17]+":"); break;
+				 case 7:  this->testo.setString(" "+this->game->textEngine->testo[18]+":"); break;
+				 case 8:  this->testo.setString(" "+this->game->textEngine->testo[19]+":"); break;
+				 case 9:  this->testo.setString(" "+this->game->textEngine->testo[20]+":"); break;
+				 case 10: this->testo.setString(" "+this->game->textEngine->testo[21]+":"); break;
 				 default:
 				 	if(this->index == this->maxIndex-1){
-						this->testo.setString(">Close this menu");
+						this->testo.setString(">"+this->game->textEngine->testo[8]);
 						this->testo.setFillColor(sf::Color(255,0,0,255));
 					}else{
-						this->testo.setString(" Close this menu");
+						this->testo.setString(" "+this->game->textEngine->testo[8]);
 					}
 					break;
 				}
@@ -337,7 +340,7 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 
 		 case 2: //gamepad settings menu
 			this->testo.setCharacterSize(32);
-			this->testo.setString("GAMEPAD BINDINGS");
+			this->testo.setString(this->game->textEngine->testo[10]);
 			this->testo.setFillColor(sf::Color(255,0,0,255));
 			AlignCenter(&this->testo);
 			this->testo.setPosition(sf::Vector2f(x+this->width/2, y+this->borderDim/2));
@@ -371,23 +374,23 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 				this->testo.setFillColor(sf::Color::White);
 				this->testo.setPosition(sf::Vector2f(x+borderDim/2, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
 				switch(i){
-				 case 0:  this->testo.setString(" Up:"); break;
-				 case 1:  this->testo.setString(" Down:"); break;
-				 case 2:  this->testo.setString(" Right:"); break;
-				 case 3:  this->testo.setString(" Left:"); break;
-				 case 4:  this->testo.setString(" Jump:"); break;
-				 case 5:  this->testo.setString(" Dash:"); break;
-				 case 6:  this->testo.setString(" Attack:"); break;
-				 case 7:  this->testo.setString(" Start:"); break;
-				 case 8:  this->testo.setString(" Map:"); break;
-				 case 9:  this->testo.setString(" L key:"); break;
-				 case 10: this->testo.setString(" R key:"); break;
+				 case 0:  this->testo.setString(" "+this->game->textEngine->testo[11]+":"); break;
+				 case 1:  this->testo.setString(" "+this->game->textEngine->testo[12]+":"); break;
+				 case 2:  this->testo.setString(" "+this->game->textEngine->testo[13]+":"); break;
+				 case 3:  this->testo.setString(" "+this->game->textEngine->testo[14]+":"); break;
+				 case 4:  this->testo.setString(" "+this->game->textEngine->testo[15]+":"); break;
+				 case 5:  this->testo.setString(" "+this->game->textEngine->testo[16]+":"); break;
+				 case 6:  this->testo.setString(" "+this->game->textEngine->testo[17]+":"); break;
+				 case 7:  this->testo.setString(" "+this->game->textEngine->testo[18]+":"); break;
+				 case 8:  this->testo.setString(" "+this->game->textEngine->testo[19]+":"); break;
+				 case 9:  this->testo.setString(" "+this->game->textEngine->testo[20]+":"); break;
+				 case 10: this->testo.setString(" "+this->game->textEngine->testo[21]+":"); break;
 				 default:
 				 	if(this->index == this->maxIndex-1){
-						this->testo.setString(">Close this menu");
+						this->testo.setString(">"+this->game->textEngine->testo[8]);
 						this->testo.setFillColor(sf::Color(255,0,0,255));
 					}else{
-						this->testo.setString(" Close this menu");
+						this->testo.setString(" "+this->game->textEngine->testo[8]);
 					}
 					break;
 				}
@@ -411,14 +414,25 @@ void SettingsMenu::Physics(GameEngine* game){
 				bool tastiPremuti = false;
 				switch(this->state){
 				 case 0: //main settings menu
-				 	this->maxIndex=3;
+				 	this->maxIndex=4;
 					if(game->keys[4] && !this->tastoGiaSchiacciato){this->isClosing=true;}
 					if((game->keys[5] || game->keys[7]) && !this->tastoGiaSchiacciato){
-						if(this->index != this->maxIndex-1){
-							this->state=this->index+1;
-							this->index = 0;
-						}else{
-							this->isClosing=true;
+						switch (this->index){
+							case 0: case 1:
+								this->state=this->index+1;
+								this->index = 0;
+								break;
+							case 2:
+								if(this->langIndex < this->langMaxIndex){
+									this->langIndex++;
+								}else{
+									this->langIndex=0;
+								}
+								this->game->SetLanguage(this->game->textEngine->languagesFound[this->langIndex]);
+								break;
+							default:
+								this->isClosing=true;
+								break;
 						}
 					}
 					break;
@@ -482,7 +496,7 @@ void SettingsMenu::Physics(GameEngine* game){
 								if(atLeastOneJoystickIsConnected){
 									this->listenNewKey = true;
 								}else{
-									new Alert(game, 16, "No gamepad connected or found.\n\nWithout a gamepad connected it's impossible to bind new keys.");
+									new Alert(game, 16, this->game->textEngine->testo[22]+"\n\n"+this->game->textEngine->testo[23]);
 								}
 							}
 						}
@@ -529,7 +543,12 @@ void SettingsMenu::Physics(GameEngine* game){
 		}
 }
 SettingsMenu::SettingsMenu(GameEngine* game){
+	this->game = game;
 	this->index = 0; this->maxIndex = 0;
+	this->langMaxIndex = game->textEngine->languagesFoundCount-1;
+	for(this->langIndex=0; this->langIndex<this->langMaxIndex+1; this->langIndex++){
+		if(this->game->textEngine->languagesFound[this->langIndex] == this->game->language){break;}
+	}
 	this->listenNewKey = false;
 	this->maxWidth=game->windowWidth;
 	this->maxHeight=game->windowHeight;
@@ -548,6 +567,6 @@ SettingsMenu::SettingsMenu(GameEngine* game){
 	this->previousMenu = game->currentMenu;
 	this->testo = sf::Text("", game->font, 32);
 	game->ChangeGameState(3, this);
-	this->game = game;
+	
 	this->state = 0;
 } 
