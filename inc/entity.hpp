@@ -35,3 +35,14 @@ class Blocco : public Entity{
 	void CreateHitbox();
 	void Render(sf::RenderWindow* window) override;
 };
+
+class Slope : public Entity{
+ public:
+	float x1, y1, x2, y2, coefficienteAngolare, intersezioneQ;
+	int slopeType;
+	sf::ConvexShape shape;
+	sf::Color color;
+	void Initialize();
+	float CalculateIntersection(Entity* entity);
+	void Render(sf::RenderWindow* window) override;
+};

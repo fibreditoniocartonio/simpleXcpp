@@ -61,6 +61,30 @@ int ResolveCollision(Entity* entity, Entity* obstacle){
     }
 }
 
+void ResolveSlopeCollision(Entity* entity, Slope* slope){
+    if(slope->slopeType == 0 || slope->slopeType == 1){
+        entity->y = slope->CalculateIntersection(entity) - entity->height;
+        entity->yv = 0;
+    }else{
+        entity->y = slope->CalculateIntersection(entity);
+        entity->yv = -entity->yv*0.2;
+    }
+    switch (slope->slopeType){
+        case 0:
+            if(entity->xv > 0 && (entity->x+entity->width+entity->xv*2 >= slope->x2-1)){ entity->y = slope->y2 - 4 - entity->height; }
+            break;
+        case 1:
+            if(entity->xv < 0 && (entity->x+entity->xv*2 <= slope->x2+1)){ entity->y = slope->y2 - 4 - entity->height; }
+            break;
+        case 2:
+            if(entity->xv > 0 && (entity->x+entity->width >= slope->x2-entity->width/2-1)){ entity->y = slope->y2 + 2; }
+            break;
+        default:
+            if(entity->xv < 0 && (entity->x <= slope->x2+entity->width/2+1)){ entity->y = slope->y2 + 2; }
+            break;
+    }
+}
+
 void DoGamePhysics(GameEngine* game, Player* player, Livello* level, sf::RenderWindow* window){
 	switch (game->gamestate){
 	 case 1: static_cast<Alert*>(game->currentMenu)->Physics(game);
