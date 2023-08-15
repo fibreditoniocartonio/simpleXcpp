@@ -1,9 +1,10 @@
-#include "../inc/physics.hpp"
 #include "../inc/player.hpp"
 #include "../inc/level.hpp"
 #include "../inc/gameEngine.hpp"
 #include "../inc/entity.hpp"
 #include "../inc/menu.hpp"
+#include "../inc/levelEditor.hpp"
+#include "../inc/physics.hpp"
 
 bool CollisionBetween(Entity* e1, Entity* e2){
 	if(
@@ -93,6 +94,8 @@ void DoGamePhysics(GameEngine* game, Player* player, Livello* level, sf::RenderW
 		break;        
 	 case 3: static_cast<SettingsMenu*>(game->currentMenu)->Physics(game);
 		break;
+	 case 1000: static_cast<Editor*>(game->currentMenu)->Physics(game);
+		break;	        
 	 default: //usually -1, in game
 	 	//player physics
 		player->Physics(game, level);

@@ -5,11 +5,12 @@
 #include "../inc/physics.hpp"
 #include "../inc/menu.hpp"
 
+#include "../inc/levelEditor.hpp"
+
 Player::Player(GameEngine* game){
 		this->width=20; this->height=24;
 		this->shape.setSize(sf::Vector2f(this->width, this->height));
 		this->shape.setFillColor(sf::Color(0,64,240,255));
-	
 		this->text.setCharacterSize(this->charSize);
 		this->text.setFillColor(sf::Color::Yellow);
 		this->text.setFont(game->font);
@@ -90,7 +91,8 @@ void Player::Physics(GameEngine* game, Livello* level){
 	}
 
 	if(game->keys[7]){
-        new SettingsMenu(game);
+        //new SettingsMenu(game);
+		new Editor(game);
 		//new Alert(game, 16, level->GenerateLevelString());
 	}
 } 

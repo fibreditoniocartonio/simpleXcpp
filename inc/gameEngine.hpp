@@ -8,6 +8,7 @@
 #include "gameVersion.hpp"
 
 class TextEngine;
+class Livello;
 
 class JoystickHandler {
  public:
@@ -23,10 +24,12 @@ class GameEngine {
 	int newKeyIndex [2];
 	const int frameLimit = 60;
 	const int windowWidth=360, windowHeight=270;
+	sf::RenderWindow* window;
 	sf::Font font;
-    	sf::Joystick joystick;
+    sf::Joystick joystick;
 	JoystickHandler joystickHandler;
 	TextEngine* textEngine;
+	Livello* level;
 	std::string language;
 	
 	int gamestate = 2;
@@ -38,6 +41,7 @@ class GameEngine {
 	//stato 4: opzioni nelle stage selection - var nelleOpzioniStageSelect=false; 
 	//stato 5: nel menu carica partita - var nelMenuCaricaPartita=false; 
 	//stato 6: menu Mappa - map menu
+	//stato 1000: Level Editor
 	
 	void ChangeGameState(int newGameState, void* newMenu);
 

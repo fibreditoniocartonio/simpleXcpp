@@ -16,6 +16,7 @@
 int main(){
 	GameEngine game;
 	sf::RenderWindow window(sf::VideoMode(game.windowWidth, game.windowHeight), "simpleXcpp");
+	game.window = &window;
 	window.setFramerateLimit(game.frameLimit);
 	window.setView(calcViewWhenResized(window.getSize(), sf::Vector2u(game.windowWidth, game.windowHeight)));
 	
@@ -23,6 +24,7 @@ int main(){
 
 	Livello level (&game, &player);
 	level.LoadLevel("./levels/test1");
+	game.level = &level;
 
     new MainMenu(&game);
     game.SetLanguage("english.txt"); //read texts from language file

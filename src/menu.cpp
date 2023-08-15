@@ -397,7 +397,6 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 				window->draw(this->testo);
 			}
 		 	break;
-
 		 default: break;
 		}//fine switch(state)
 	}
@@ -567,6 +566,5 @@ SettingsMenu::SettingsMenu(GameEngine* game){
 	this->previousMenu = game->currentMenu;
 	this->testo = sf::Text("", game->font, 32);
 	game->ChangeGameState(3, this);
-	
 	this->state = 0;
 } 
