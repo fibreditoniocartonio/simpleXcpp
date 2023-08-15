@@ -14,6 +14,7 @@ class Livello {
  public:
 	GameEngine* game;
     Player* player;
+	sf::Vector2f playerStartingPos;
 	std::vector<Entity*> entity;
     std::string currentLevelFile = "";
 	int contaEntity=0;
@@ -24,9 +25,12 @@ class Livello {
 	Livello(GameEngine* game, Player* player);
 
 	//Decoder
-	void LoadLevel(std::string filePath);
-    
 	void CleanLevel();
-
+	void LoadLevel(std::string filePath);
+	void SetProprieties(std::string* tempString);
+	std::string GetProprieties();
+	void SetPlayerInitialPosition(std::string* tempString);
+	std::string GetPlayerInitialPosition();
 	void DecodeObj(std::string tempString[32]);
+	std::string GenerateLevelString();
 };

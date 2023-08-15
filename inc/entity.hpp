@@ -18,6 +18,7 @@ class Entity {
 	std::string id;
 	virtual void Physics(Player* player);
 	virtual void Render(sf::RenderWindow* window);
+	virtual std::string SaveToFile();
 	virtual ~Entity();
 	Entity ();
  	Entity (float x, float y, int width, int height);
@@ -32,8 +33,12 @@ class Blocco : public Entity{
  public:
 	sf::RectangleShape shape;
 	sf::Color color;
-	void CreateHitbox();
+	int skipOnSave;
 	void Render(sf::RenderWindow* window) override;
+	int Initialize(std::vector<Entity*> *entity);
+	int Initialize(std::vector<Entity*> *entity, std::string* tempString);
+	void UpdateRenderHitbox();
+	std::string SaveToFile() override;
 };
 
 class Slope : public Entity{
@@ -42,7 +47,8 @@ class Slope : public Entity{
 	int slopeType;
 	sf::ConvexShape shape;
 	sf::Color color;
-	void Initialize();
 	float CalculateIntersection(Entity* entity);
 	void Render(sf::RenderWindow* window) override;
+	int Initialize(std::vector<Entity*> *entity, std::string* tempString);
+	std::string SaveToFile() override;
 };
