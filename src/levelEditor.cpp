@@ -32,7 +32,7 @@ void Editor::Render(sf::RenderWindow* window){
         sf::View editorView = calcViewOnPlayerMovement(window->getView(), this->camera, this->game->level, game->windowWidth, game->windowHeight);
         editorView.setViewport(sf::FloatRect(0.f, 0.f, editorView.getViewport().width, editorView.getViewport().height));
         window->setView(editorView);
-        Entity screen = Entity(window->getView().getCenter().x-this->windowWidthEditor/2, window->getView().getCenter().y-this->windowHeightEditor/2, game->windowWidth, game->windowHeight);
+        Entity screen = Entity(window->getView().getCenter().x-game->windowWidth/2, window->getView().getCenter().y-game->windowHeight/2, game->windowWidth, game->windowHeight);
         for(int i=0; i < this->game->level->contaEntity; i++){
             if(this->game->level->entity[i]->isActive){
                 if(CollisionBetween(&screen, this->game->level->entity[i])){
@@ -47,11 +47,11 @@ void Editor::Render(sf::RenderWindow* window){
         window->draw(rect);
         //draw the right part of the screen, the tools menu of the levelEditor
         editorView.setViewport(sf::FloatRect(editorView.getViewport().width, 0.f, (1.f-editorView.getViewport().width), 1.f));
-        editorView.setCenter(sf::Vector2f(3*(this->windowWidthEditor-this->game->windowWidth)/2, this->windowHeightEditor/2));
+        editorView.setSize(sf::Vector2f((this->windowWidthEditor-this->game->windowWidth), this->windowHeightEditor));
+        editorView.setCenter(sf::Vector2f(editorView.getSize().x/2, editorView.getSize().y/2));
         window->setView(editorView);
 		rect.setPosition(0, 0);
         rect.setSize(sf::Vector2f(this->windowWidthEditor-this->game->windowWidth, this->windowHeightEditor));
-        //rect.setSize(sf::Vector2f(120, 270));
         window->draw(rect);
         break;
     }
