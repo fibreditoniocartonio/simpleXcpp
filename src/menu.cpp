@@ -92,9 +92,9 @@ Alert::Alert(GameEngine* game, int charSize, std::string stringa){
 	this->color2 = sf::Color(200,200,200,255);
 	this->previousGameState = game->gamestate;
 	this->previousMenu = game->currentMenu;
-        std::string finalString = "";	
+    std::string finalString = "";	
 	int maxCharPerLine=(int)(2*(this->maxWidth-(2*this->borderDim))/charSize);
-        int charNum = 1;
+    int charNum = 1;
 	for(int i=0; i < stringa.length(); i++){
             finalString += stringa[i];
             charNum++;
@@ -119,8 +119,7 @@ Alert::Alert(GameEngine* game, int charSize, std::string stringa){
                 charNum=1;
             }    
 	}
-	this->testo = sf::Text(finalString, game->font, charSize);
-	this->testo.setFillColor(sf::Color::White);
+	this->testo = sf::Text(finalString, game->font, charSize); this->testo.setFillColor(sf::Color::White);
 	game->ChangeGameState(1, this);
 }
 
@@ -131,10 +130,10 @@ void MainMenu::Render(sf::RenderWindow* window){
 	int y=(int)(window->getView().getCenter().y - this->height/2);
 	if(this->isOpen && !this->isClosing){
         this->titleScreenSprite.setPosition(sf::Vector2f(x,y));
-        window->draw(this->titleScreenSprite);    
+        window->draw(this->titleScreenSprite);
         this->testo.setCharacterSize(32);
 		for(int i=0; i < this->maxIndex; i++){
-			this->testo.setPosition(sf::Vector2f(x+this->width/3, y+this->height/2+this->testo.getCharacterSize()*i));
+			this->testo.setPosition(sf::Vector2f(x+this->width/6, y+this->height/2+this->testo.getCharacterSize()*i));
 			std::string txtString = " ";
 			if(this->index == i){
 				this->testo.setFillColor(sf::Color(216,136,0,255));

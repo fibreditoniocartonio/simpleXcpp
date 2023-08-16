@@ -9,6 +9,7 @@
 
 class TextEngine;
 class Livello;
+class Player;
 
 class JoystickHandler {
  public:
@@ -30,6 +31,7 @@ class GameEngine {
 	JoystickHandler joystickHandler;
 	TextEngine* textEngine;
 	Livello* level;
+	Player* player;
 	std::string language;
 	
 	int gamestate = 2;

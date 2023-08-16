@@ -21,6 +21,7 @@ int main(){
 	window.setView(calcViewWhenResized(window.getSize(), sf::Vector2u(game.windowWidth, game.windowHeight)));
 	
 	Player player (&game);
+	game.player = &player;
 
 	Livello level (&game, &player);
 	level.LoadLevel("./levels/test1");
@@ -61,7 +62,6 @@ int main(){
 
 			}else if (event.type == sf::Event::JoystickButtonReleased){
 				game.UpdateKeysJoystick(event.joystickButton.button, false);
-
 			}                                                
        	}
 		//Physics

@@ -23,3 +23,8 @@
 00022-Nessun gamepad connesso o riconosciuto.
 00023-Senza un gamepad connesso e' impossibile assegnare dei nuovi tasti.
 00024-Linguaggio
+00025-Nuovo Livello
+00026-Carica Livello
+00027-Ritorna al gioco
+00028-Si
+00029-No

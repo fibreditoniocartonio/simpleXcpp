@@ -23,11 +23,11 @@
 00022-No gamepad connected or found.
 00023-Without a gamepad connected it's impossible to bind new keys.
 00024-Language
-00025-
-00026-
-00027-
-00028-
-00029-
+00025-New Level
+00026-Load Level
+00027-Return to the game
+00028-Yes
+00029-No
 00030-
 00031-
 00032-
