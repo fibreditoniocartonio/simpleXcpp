@@ -28,8 +28,8 @@
 00027-Return to the game
 00028-Yes
 00029-No
-00030-
-00031-
+00030-Joystick
+00031-disconnected
 00032-
 00033-
 00034-

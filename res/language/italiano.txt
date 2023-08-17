@@ -28,3 +28,6 @@
 00027-Ritorna al gioco
 00028-Si
 00029-No
+00030-Joystick
+00031-disconnesso
+00032-Premi un tasto per continuare.

@@ -1,5 +1,6 @@
 #include "../inc/gameEngine.hpp"
 #include "../inc/textEngine.hpp"
+#include "../inc/levelEditor.hpp"
 #include "../inc/menu.hpp"
 
 int JoystickHandler::GetAxisKey(sf::Event* evento){
@@ -34,9 +35,8 @@ void GameEngine::UpdateKeys(sf::Keyboard::Key keyInput, bool isPressed){
 void GameEngine::UpdateMouseCoordinate(sf::Vector2f absoluteMousePosition){
 	switch(this->gamestate){
 		case 1000:	//level editor
-			//this->mouse.x = absoluteMousePosition.x * (float)this->windowWidth / (float)this->window->getSize().x;
-			this->mouse.x = absoluteMousePosition.x * 480.f / (float)this->window->getSize().x; //temp
-			this->mouse.y = absoluteMousePosition.y * (float)this->windowHeight / (float)this->window->getSize().y;
+			this->mouse.x = absoluteMousePosition.x * (float)static_cast<Editor*>(this->currentMenu)->windowWidthEditor / (float)this->window->getSize().x;
+			this->mouse.y = absoluteMousePosition.y * (float)static_cast<Editor*>(this->currentMenu)->windowHeightEditor / (float)this->window->getSize().y;
 			break;
 		default:
 			if(this->window->getSize().x > this->window->getSize().y){
@@ -50,7 +50,11 @@ void GameEngine::UpdateMouseCoordinate(sf::Vector2f absoluteMousePosition){
 	}
 }
 void GameEngine::UpdateMouseButton(sf::Mouse::Button mouseInput, bool isPressed){
-	//i have to implement this
+	if(mouseInput == sf::Mouse::Left){
+		this->mouseClick[0] = isPressed;
+	}else if(mouseInput == sf::Mouse::Right){
+		this->mouseClick[1] = isPressed;
+	}
 }
 
 void GameEngine::UpdateKeysJoystick(int keyInput, bool isPressed){

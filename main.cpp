@@ -12,6 +12,8 @@
 #include "inc/player.hpp"
 #include "inc/physics.hpp"
 #include "inc/rendering.hpp"
+#include "inc/levelEditor.hpp"
+#include "inc/textEngine.hpp"
 
 int main(){
 	GameEngine game;
@@ -51,7 +53,6 @@ int main(){
 			}else if (event.type == sf::Event::MouseButtonPressed){
 				game.UpdateMouseButton(event.mouseButton.button, true);
 				game.UpdateMouseCoordinate(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
-				if(event.mouseButton.button == sf::Mouse::Left){ new Alert(&game, 16, "Left\nabsx: "+std::to_string(event.mouseButton.x)+" absy:"+std::to_string(event.mouseButton.y)+"\nwinx: "+std::to_string(game.mouse.x)+" winy:"+std::to_string(game.mouse.y)); }
 			}else if (event.type == sf::Event::MouseButtonReleased){
 				game.UpdateMouseButton(event.mouseButton.button, false);
 				game.UpdateMouseCoordinate(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
@@ -59,7 +60,7 @@ int main(){
 				game.UpdateMouseCoordinate(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
 
 			}else if (event.type == sf::Event::JoystickDisconnected){
-				new Alert (&game, 16, "Joystick "+std::to_string(event.joystickConnect.joystickId)+" disconnected.\n("+game.joystick.getIdentification(event.joystickConnect.joystickId).name+")\n\nPress any button to resume the game.");
+				new Alert (&game, 16, game.textEngine->testo[30]+" "+std::to_string(event.joystickConnect.joystickId)+" "+game.textEngine->testo[31]+".\n"+game.textEngine->testo[30]+": ("+game.joystick.getIdentification(event.joystickConnect.joystickId).name+")\n\n"+game.textEngine->testo[32]);
 			} else if (event.type == sf::Event::JoystickMoved){
 				if(game.listenNewKey == 2){ game.BindNewKeyJS(game.joystickHandler.GetAxisKey(&event));
 				}else{ game.UpdateKeysJoystick(game.joystickHandler.GetAxisKey(&event), true);}
