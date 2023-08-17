@@ -32,6 +32,8 @@ class GameEngine {
 	TextEngine* textEngine;
 	Livello* level;
 	Player* player;
+	sf::Vector2f mouse; //mouse coordinates
+	bool mouseClick [2] = {false, false}; //0:leftbtn, 1:rightbtn
 	std::string language;
 	
 	int gamestate = 2;
@@ -78,6 +80,9 @@ class GameEngine {
 	
 	void UpdateKeys(sf::Keyboard::Key keyInput, bool isPressed);    
 	void UpdateKeysJoystick(int keyInput, bool isPressed);
+	void UpdateMouseCoordinate(sf::Vector2f absoluteMousePosition);
+	void UpdateMouseButton(sf::Mouse::Button mouseInput, bool isPressed);
+	sf::Vector2f MouseCoordInView(const sf::View* currentView);
 	void BindNewKeyKB(sf::Keyboard::Key keyInput);
 	void BindNewKeyJS(int keyInput);
 	void SetLanguage(std::string language);

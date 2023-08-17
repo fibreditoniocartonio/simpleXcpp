@@ -42,7 +42,8 @@ void Editor::Render(sf::RenderWindow* window){
         this->testo.setCharacterSize(32);
 		for(int i=0; i < this->maxIndex; i++){
 			this->testo.setPosition(sf::Vector2f(80, 140+this->testo.getCharacterSize()*i));
-			std::string txtString = " ";
+			//std::string txtString = " ";
+            std::string txtString;
 			if(this->index == i){
 				this->testo.setFillColor(sf::Color(216,136,0,255));
 				txtString = ">";
