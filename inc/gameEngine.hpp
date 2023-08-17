@@ -82,7 +82,6 @@ class GameEngine {
 	void UpdateKeysJoystick(int keyInput, bool isPressed);
 	void UpdateMouseCoordinate(sf::Vector2f absoluteMousePosition);
 	void UpdateMouseButton(sf::Mouse::Button mouseInput, bool isPressed);
-	sf::Vector2f MouseCoordInView(const sf::View* currentView);
 	void BindNewKeyKB(sf::Keyboard::Key keyInput);
 	void BindNewKeyJS(int keyInput);
 	void SetLanguage(std::string language);

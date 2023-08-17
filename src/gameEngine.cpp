@@ -32,16 +32,22 @@ void GameEngine::UpdateKeys(sf::Keyboard::Key keyInput, bool isPressed){
 }
 
 void GameEngine::UpdateMouseCoordinate(sf::Vector2f absoluteMousePosition){
-	if(this->window->getSize().x > this->window->getSize().y){
-		this->mouse.x = (absoluteMousePosition.x-((float)this->window->getSize().x*(float)this->window->getView().getViewport().left)) * (float)this->windowWidth / (float)this->window->getSize().x;
-		this->mouse.y = absoluteMousePosition.y * (float)this->windowHeight / (float)this->window->getSize().y;
-	}else{
-		this->mouse.x = absoluteMousePosition.x * (float)this->windowWidth / (float)this->window->getSize().x;
-		this->mouse.y = (absoluteMousePosition.y-((float)this->window->getSize().y*(float)this->window->getView().getViewport().top)) * (float)this->windowHeight / (float)this->window->getSize().y;
+	switch(this->gamestate){
+		case 1000:	//level editor
+			//this->mouse.x = absoluteMousePosition.x * (float)this->windowWidth / (float)this->window->getSize().x;
+			this->mouse.x = absoluteMousePosition.x * 480.f / (float)this->window->getSize().x; //temp
+			this->mouse.y = absoluteMousePosition.y * (float)this->windowHeight / (float)this->window->getSize().y;
+			break;
+		default:
+			if(this->window->getSize().x > this->window->getSize().y){
+				this->mouse.x = (absoluteMousePosition.x-((float)this->window->getSize().x*(float)this->window->getView().getViewport().left)) * (float)this->windowWidth / ((float)this->window->getSize().x-2*(float)this->window->getSize().x*(float)this->window->getView().getViewport().left);
+				this->mouse.y = absoluteMousePosition.y * (float)this->windowHeight / (float)this->window->getSize().y;
+			}else{
+				this->mouse.x = absoluteMousePosition.x * (float)this->windowWidth / (float)this->window->getSize().x;
+				this->mouse.y = (absoluteMousePosition.y-((float)this->window->getSize().y*(float)this->window->getView().getViewport().top)) * (float)this->windowHeight / ((float)this->window->getSize().y-2*(float)this->window->getSize().y*(float)this->window->getView().getViewport().top);
+			}
+			break;
 	}
-}
-sf::Vector2f GameEngine::MouseCoordInView(const sf::View* currentView){
-	return sf::Vector2f((this->mouse.x+currentView->getCenter().x-currentView->getSize().x/2), (this->mouse.y+currentView->getCenter().y-currentView->getSize().y/2));
 }
 void GameEngine::UpdateMouseButton(sf::Mouse::Button mouseInput, bool isPressed){
 	//i have to implement this
