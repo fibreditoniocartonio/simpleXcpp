@@ -30,7 +30,7 @@
 00029-No
 00030-Joystick
 00031-disconnected
-00032-
+00032-Press any button to resume the game.
 00033-
 00034-
 00035-

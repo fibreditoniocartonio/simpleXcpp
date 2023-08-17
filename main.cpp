@@ -41,7 +41,13 @@ int main(){
 				window.close();
 			}
 			if (event.type == sf::Event::Resized){ //reset the view when window is resized
-				window.setView(calcViewWhenResized(window.getSize(), sf::Vector2u(game.windowWidth, game.windowHeight)));
+				switch(game.gamestate){
+					case 1000: //level editor
+            			window.setView(calcViewWhenResized(window.getSize(), sf::Vector2u(static_cast<Editor*>(game.currentMenu)->windowWidthEditor, static_cast<Editor*>(game.currentMenu)->windowHeightEditor)));
+					default:
+						window.setView(calcViewWhenResized(window.getSize(), sf::Vector2u(game.windowWidth, game.windowHeight)));
+						break;
+				}
 			}
 			//read input events
 			if (event.type == sf::Event::KeyPressed){

@@ -26,6 +26,29 @@ AABB::AABB(Entity* e1){
     this->yv = e1->yv; 
 }
 
+//testo
+Testo::Testo(std::string stringa, float x, float y, int size, sf::Color color, sf::Font font){
+    this->x = x; this->y = y+size/2;
+    this->testo.setFont(font);
+    this->testo.setFillColor(color);
+    this->testo.setCharacterSize(size);
+    this->testo.setString(stringa);
+    this->testo.setPosition(sf::Vector2f(x,y));
+    this->width = testo.getGlobalBounds().width;
+    this->height = testo.getGlobalBounds().height;
+}
+void Testo::CopyTextIn (sf::Text* targetText){
+    //targetText->setFont(this->testo.getFont());
+    targetText->setFillColor(this->testo.getFillColor());
+    targetText->setCharacterSize(this->testo.getCharacterSize());
+    targetText->setString(this->testo.getString());
+    targetText->setPosition(this->testo.getPosition());
+}
+void Testo::Render(sf::RenderWindow* window){ window->draw(this->testo); }
+
+
+//Real Entities
+
 //Blocco
 int Blocco::Initialize(std::vector<Entity*> *entity){
     std::string tempString[] = {"blocco", "0", "0", "0", "0", std::to_string(this->color.r), std::to_string(this->color.g), std::to_string(this->color.b), std::to_string(this->color.a), "1"};

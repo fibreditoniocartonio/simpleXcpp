@@ -24,11 +24,21 @@ class Entity {
  	Entity (float x, float y, int width, int height);
 };
 
+//useful entities for physics calculation and menus
 class AABB : public Entity{
  public:
     AABB(Entity* e1);
 };
 
+class Testo : public Entity{
+ public:
+	sf::Text testo;
+	void CopyTextIn (sf::Text* targetText);
+	void Render(sf::RenderWindow* window) override;
+	Testo(std::string stringa, float x, float y, int size, sf::Color color, sf::Font font);
+};
+
+//real entities
 class Blocco : public Entity{
  public:
 	sf::RectangleShape shape;
