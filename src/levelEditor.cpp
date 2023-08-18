@@ -16,6 +16,7 @@ Editor::Editor(GameEngine* game){
     this->camera = sf::Vector2f(game->player->x+game->player->width/2, game->player->y+game->player->height/2);
     this->showCameraDot = true;
     this->tastoGiaSchiacciato = true;
+    this->alertAspectRatioAlreadyShown = false;
     this->index=0; this->maxIndex=0;
     if (!this->texture.loadFromFile("./res/img/titlescreen/titlescreen.png")){new Alert(this->game, 16, this->game->textEngine->testo[4]+"\n\n./res/img/titlescreen/titlescreen.png");}
     this->texture.setSmooth(false); //do not blur the pixels
@@ -94,6 +95,10 @@ void Editor::Render(sf::RenderWindow* window){
     }
 }
 void Editor::Physics(GameEngine* game){
+    if(!this->alertAspectRatioAlreadyShown && (((float)game->window->getSize().x/(float)game->window->getSize().y > (16.f/9.f)+0.1) || ((float)game->window->getSize().x/(float)game->window->getSize().y < (16.f/9.f)-0.1))){
+        this->alertAspectRatioAlreadyShown = true;
+        new Alert(game, 16, game->textEngine->testo[33]);
+    }
     bool tastiPremuti=false, click=false;
     Entity mouse (this->game->mouse.x, this->game->mouse.y, 1, 1);
     switch(this->state){

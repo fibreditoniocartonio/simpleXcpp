@@ -31,7 +31,7 @@
 00030-Joystick
 00031-disconnected
 00032-Press any button to resume the game.
-00033-
+00033-The Level Editor is designed to work with an aspect ratio of 16:9. There will be unexpected rendering behaviours with a different aspect ratio.
 00034-
 00035-
 00036-

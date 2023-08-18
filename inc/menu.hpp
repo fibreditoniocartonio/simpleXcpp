@@ -7,18 +7,15 @@
 #include <SFML/Graphics.hpp>
 
 class GameEngine;
-
+class Testo;
 
 class Menu {
  public:
 	int width, height, maxWidth, maxHeight, speed;
 	bool isOpen=false, isClosing=false;
-
 	virtual void Physics(GameEngine* game);
 	virtual void Render(sf::RenderWindow* window);
-	virtual	void Animation();
-	
-	//constructor and destructor
+	virtual	void Animation();	
 	Menu();
 	virtual ~Menu();
 };
@@ -32,7 +29,6 @@ class Alert : public Menu{  //gamestate 1
 	void* previousMenu;
 	void Render(sf::RenderWindow* window) override;
 	void Physics(GameEngine* game) override;
-	//constructor
 	Alert(GameEngine* game, int charSize, std::string stringa);
 };
 
@@ -42,13 +38,17 @@ class MainMenu : public Menu{   //gamestate 2
 	int previousGameState, index, maxIndex;
 	bool tastoGiaSchiacciato=true, exitGame=false;
 	sf::Text testo;
+	std::vector<Testo*> textClick;
     sf::Texture titleScreenImg;
     sf::Sprite titleScreenSprite;
+	std::string language;
 	void* previousMenu;
 	GameEngine* game;
+	void InitializeClickableText();
+	void CleanClickableText();
+	void CloseMenu();
 	void Render(sf::RenderWindow* window) override;
 	void Physics(GameEngine* game) override;
-	//constructor
 	MainMenu(GameEngine* game);
 };
 
@@ -64,6 +64,5 @@ class SettingsMenu : public Menu{   //gamestate 3
 	int state; //0: main setting menu, 1:keyboard settings, 2:gamepad settings
 	void Render(sf::RenderWindow* window) override;
 	void Physics(GameEngine* game) override;
-	//constructor
 	SettingsMenu(GameEngine* game);
 };

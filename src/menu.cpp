@@ -1,20 +1,8 @@
-#include "../inc/menu.hpp"
+#include "../inc/entity.hpp"
+#include "../inc/physics.hpp"
 #include "../inc/gameEngine.hpp"
 #include "../inc/textEngine.hpp"
-
-void Menu::Physics(GameEngine* game) {}
-void Menu::Render(sf::RenderWindow* window){}
-void Menu::Animation(){
-		if(!this->isClosing){
-			this->width+=(int)(this->maxWidth/speed);
-			this->height+=(int)(this->maxWidth/speed);
-		}else{
-			this->width-=(int)(this->maxWidth/speed);
-			this->height-=(int)(this->maxHeight/speed);
-		}
-}
-Menu::Menu(){}
-Menu::~Menu(){}
+#include "../inc/menu.hpp"
 
 void AlignCenter(sf::Text* text){
 	text->setOrigin(sf::Text().getGlobalBounds().left+text->getGlobalBounds().width/2.0f, sf::Text().getGlobalBounds().top +text->getGlobalBounds().height/2.0f);
@@ -23,57 +11,22 @@ void AlignLeft(sf::Text* text){
 	text->setOrigin(sf::Text().getOrigin());
 }
 
+Menu::Menu(){}
+void Menu::Physics(GameEngine* game) {}
+void Menu::Render(sf::RenderWindow* window){}
+void Menu::Animation(){
+	if(!this->isClosing){
+		this->width+=(int)(this->maxWidth/speed);
+		this->height+=(int)(this->maxWidth/speed);
+	}else{
+		this->width-=(int)(this->maxWidth/speed);
+		this->height-=(int)(this->maxHeight/speed);
+	}
+}
+Menu::~Menu(){}
+
 
 //Alert -> gamestate = 1
-void Alert::Render(sf::RenderWindow* window){
-		sf::RectangleShape rect;
-		rect.setSize(sf::Vector2f(this->width, this->height));
-		int x=(int)(window->getView().getCenter().x - this->width/2);
-		int y=(int)(window->getView().getCenter().y - this->height/2);
-		rect.setPosition(x,y);
-		rect.setFillColor(this->color2);
-		window->draw(rect);
-		if((this->width > this->borderDim) && (this->height > this->borderDim)){
-			rect.setPosition(x+(this->borderDim/2),y+(this->borderDim/2));
-			rect.setSize(sf::Vector2f((this->width - this->borderDim), (this->height - this->borderDim)));
-			rect.setFillColor(this->color1);
-			window->draw(rect);
-		}
-		if(this->isOpen && !this->isClosing){
-			this->testo.setPosition(sf::Vector2f(x+this->borderDim, y+this->borderDim));
-			window->draw(this->testo);
-		}
-}
-void Alert::Physics(GameEngine* game){
-		if(!this->isOpen){
-			this->Animation();
-			if(this->width > this->maxWidth){this->width=this->maxWidth;}
-			if(this->height > this->maxHeight){this->height=this->maxHeight;}
-			if(this->width == this->maxWidth && this->height == this->maxHeight){this->isOpen=true;}
-		}else{
-			if(!this->isClosing){
-				if(this->timer>0){
-					this->timer--;
-				}else{
-					for(int i=0; i<11; i++){
-						//read input to close the Alert
-						if(game->keys[i]){this->isClosing=true;}
-					}
-				}
-			}else{
-				if(this->previousGameState == -1){
-					this->Animation();
-					if(this->width < 1 && this->height < 1){
-						game->ChangeGameState(this->previousGameState, this->previousMenu);
-						delete this;
-					}
-				}else{
-					game->ChangeGameState(this->previousGameState, this->previousMenu);
-					delete this;
-				}
-			}
-		}
-}
 Alert::Alert(GameEngine* game, int charSize, std::string stringa){
 	this->maxWidth=game->windowWidth;
 	this->maxHeight=game->windowHeight;
@@ -122,90 +75,63 @@ Alert::Alert(GameEngine* game, int charSize, std::string stringa){
 	this->testo = sf::Text(finalString, game->font, charSize); this->testo.setFillColor(sf::Color::White);
 	game->ChangeGameState(1, this);
 }
-
-
-//MainMenu -> gamestate = 2
-void MainMenu::Render(sf::RenderWindow* window){
+void Alert::Render(sf::RenderWindow* window){
+	sf::RectangleShape rect;
+	rect.setSize(sf::Vector2f(this->width, this->height));
 	int x=(int)(window->getView().getCenter().x - this->width/2);
 	int y=(int)(window->getView().getCenter().y - this->height/2);
-	if(this->isOpen && !this->isClosing){
-        this->titleScreenSprite.setPosition(sf::Vector2f(x,y));
-        window->draw(this->titleScreenSprite);
-        this->testo.setCharacterSize(32);
-		for(int i=0; i < this->maxIndex; i++){
-			this->testo.setPosition(sf::Vector2f(x+this->width/6, y+this->height/2+this->testo.getCharacterSize()*i));
-			std::string txtString = " ";
-			if(this->index == i){
-				this->testo.setFillColor(sf::Color(216,136,0,255));
-				txtString = ">";
-			}else{
-				this->testo.setFillColor(sf::Color(63,72,255,255));
-			}
-			switch(i){
-			 case 0: txtString+=this->game->textEngine->testo[1];
-			 	break;
-			 case 1: txtString+=this->game->textEngine->testo[2];
-			 	break;
-			 default: txtString+=this->game->textEngine->testo[3];
-			 	break;
-			}
-			this->testo.setString(txtString);
-			window->draw(this->testo);
-		}
-        this->testo.setCharacterSize(16);
-        this->testo.setFillColor(sf::Color::White);
-        this->testo.setPosition(sf::Vector2f(x, y+this->height-this->testo.getCharacterSize()));
-		this->testo.setString(versioneDiGioco);
-		window->draw(this->testo);        
+	rect.setPosition(x,y);
+	rect.setFillColor(this->color2);
+	window->draw(rect);
+	if((this->width > this->borderDim) && (this->height > this->borderDim)){
+		rect.setPosition(x+(this->borderDim/2),y+(this->borderDim/2));
+		rect.setSize(sf::Vector2f((this->width - this->borderDim), (this->height - this->borderDim)));
+		rect.setFillColor(this->color1);
+		window->draw(rect);
 	}
-    if(this->exitGame){window->close();}
+	if(this->isOpen && !this->isClosing){
+		this->testo.setPosition(sf::Vector2f(x+this->borderDim, y+this->borderDim));
+		window->draw(this->testo);
+	}
 }
-void MainMenu::Physics(GameEngine* game){
-		if(!this->isOpen){ //menu is opening
-			this->Animation();
-			if(this->width > this->maxWidth){this->width=this->maxWidth;}
-			if(this->height > this->maxHeight){this->height=this->maxHeight;}
-			if(this->width == this->maxWidth && this->height == this->maxHeight){this->isOpen=true;}
-		}else{
-			if(!this->isClosing){ //menu is open
-				bool tastiPremuti = false;
-				if((game->keys[5] || game->keys[7]) && !this->tastoGiaSchiacciato){
-                    switch(this->index){
-                        case 0: //New Game
-                            this->previousGameState = -1; this->previousMenu = NULL;
-                            this->isClosing = true;
-                            break;
-                        case 1: //Settings
-                            new SettingsMenu(game);
-                            break;
-                        default: this->exitGame=true; break; //this flag will make Render() to call window->close()
-                    }
-				}
-				if(game->keys[0] && !this->tastoGiaSchiacciato){
-					this->index--;
-				}
-				if(game->keys[1] && !this->tastoGiaSchiacciato){
-					this->index++;
-				}
-				if(this->index > this->maxIndex-1){this->index = 0;}
-				if(this->index < 0){this->index = this->maxIndex-1;}
-				for(int i=0; i<11; i++){ if(game->keys[i]){tastiPremuti=true;} }
-				this->tastoGiaSchiacciato=tastiPremuti;
-			}else{ //menu is closing
-				if(this->previousGameState == -1){
-					this->Animation();
-					if(this->width < 1 && this->height < 1){
-						game->ChangeGameState(this->previousGameState, this);
-						delete this;
-					}
+void Alert::Physics(GameEngine* game){
+	if(!this->isOpen){
+		this->Animation();
+		if(this->width > this->maxWidth){this->width=this->maxWidth;}
+		if(this->height > this->maxHeight){this->height=this->maxHeight;}
+		if(this->width == this->maxWidth && this->height == this->maxHeight){this->isOpen=true;}
+	}else{
+		if(!this->isClosing){
+			if(this->timer>0){
+				this->timer--;
+			}else{
+				if(game->mouseClick[0] || game->mouseClick[1]){
+					this->isClosing=true;
 				}else{
+					for(int i=0; i<11; i++){
+						if(game->keys[i]){this->isClosing=true;}
+					}
+				}
+			}
+		}else{
+			if(this->previousGameState == -1){
+				this->Animation();
+				if(this->width < 1 && this->height < 1){
 					game->ChangeGameState(this->previousGameState, this->previousMenu);
 					delete this;
 				}
+			}else{
+				game->ChangeGameState(this->previousGameState, this->previousMenu);
+				delete this;
 			}
 		}
+	}
 }
+
+
+//MainMenu -> gamestate = 2
 MainMenu::MainMenu(GameEngine* game){
+	this->game = game;
 	this->index = 0;
     this->maxIndex = 3;
 	this->maxWidth=game->windowWidth;
@@ -226,12 +152,131 @@ MainMenu::MainMenu(GameEngine* game){
 	this->previousGameState = game->gamestate;
 	this->previousMenu = game->currentMenu;
 	this->testo = sf::Text("", game->font, 32);
-    this->game = game;
+	this->language=game->language;
+	this->InitializeClickableText();
 	game->ChangeGameState(2, this);
-} 
+}
+void MainMenu::CleanClickableText(){for(int i=0; i < this->textClick.size(); i++){ delete (this->textClick[i]); this->textClick = std::vector<Testo*>();}}
+void MainMenu::InitializeClickableText(){
+	this->CleanClickableText();
+	for(int i=0; i < this->maxIndex; i++){
+		this->textClick.push_back(new Testo(this->game->textEngine->testo[1+i], this->width/7, this->height/2+32*i, 32, sf::Color(63,72,255,255), this->game->font));
+	}
+}
+void MainMenu::CloseMenu(){
+	this->CleanClickableText();
+	this->game->ChangeGameState(this->previousGameState, this);
+	delete this;
+}
+void MainMenu::Render(sf::RenderWindow* window){
+	int x=(int)(window->getView().getCenter().x - this->width/2);
+	int y=(int)(window->getView().getCenter().y - this->height/2);
+	if(this->isOpen && !this->isClosing){
+        this->titleScreenSprite.setPosition(sf::Vector2f(x,y));
+        window->draw(this->titleScreenSprite);
+		for(int i=0; i < this->maxIndex; i++){
+            this->textClick[i]->CopyTextIn(&this->testo);
+			if(this->index == i){
+				this->testo.setFillColor(sf::Color(216,136,0,255));
+                this->testo.setString(">"+this->testo.getString());
+			}else{
+				this->testo.setFillColor(sf::Color(63,72,255,255));
+			}
+            window->draw(this->testo);
+		}
+        this->testo.setCharacterSize(16);
+        this->testo.setFillColor(sf::Color::White);
+        this->testo.setPosition(sf::Vector2f(x, y+this->height-this->testo.getCharacterSize()));
+		this->testo.setString(versioneDiGioco);
+		window->draw(this->testo);        
+	}
+    if(this->exitGame){window->close();}
+}
+void MainMenu::Physics(GameEngine* game){
+	if(this->language != this->game->language){this->InitializeClickableText(); this->language=this->game->language;}
+	if(!this->isOpen){ //menu is opening
+		this->Animation();
+		if(this->width > this->maxWidth){this->width=this->maxWidth;}
+		if(this->height > this->maxHeight){this->height=this->maxHeight;}
+		if(this->width == this->maxWidth && this->height == this->maxHeight){this->isOpen=true;}
+	}else{
+		if(!this->isClosing){ //menu is open
+			bool tastiPremuti=false, click=false;
+			Entity mouse (this->game->mouse.x, this->game->mouse.y, 1, 1);
+			//mouse input
+			for(int i=0; i<this->maxIndex; i++){
+				if(CollisionBetween(this->textClick[i], &mouse)){
+					this->index = i;
+					if(this->game->mouseClick[0]){
+						click=true; tastiPremuti=true;
+					}
+				}
+			}
+			//keyboard/gamepad input			
+			if((game->keys[5] || game->keys[7] || click) && !this->tastoGiaSchiacciato){
+				switch(this->index){
+					case 0: //New Game
+						this->previousGameState = -1; this->previousMenu = NULL;
+						this->isClosing = true;
+						break;
+					case 1: //Settings
+						new SettingsMenu(game);
+						break;
+					default: this->exitGame=true; break; //this flag will make Render() to call window->close()
+				}
+			}
+			if(game->keys[0] && !this->tastoGiaSchiacciato){
+				this->index--;
+			}
+			if(game->keys[1] && !this->tastoGiaSchiacciato){
+				this->index++;
+			}
+			if(this->index > this->maxIndex-1){this->index = 0;}
+			if(this->index < 0){this->index = this->maxIndex-1;}
+			for(int i=0; i<11; i++){ if(game->keys[i]){tastiPremuti=true;} }
+			this->tastoGiaSchiacciato=tastiPremuti;
+		}else{ //menu is closing
+			if(this->previousGameState == -1){
+				this->Animation();
+				if(this->width < 1 && this->height < 1){
+					this->CloseMenu();
+				}
+			}else{
+				this->CloseMenu();
+			}
+		}
+	}
+}
 
 
 //SettingsMenu -> gamestate = 3
+SettingsMenu::SettingsMenu(GameEngine* game){
+	this->game = game;
+	this->index = 0; this->maxIndex = 0;
+	this->langMaxIndex = game->textEngine->languagesFoundCount-1;
+	for(this->langIndex=0; this->langIndex<this->langMaxIndex+1; this->langIndex++){
+		if(this->game->textEngine->languagesFound[this->langIndex] == this->game->language){break;}
+	}
+	this->listenNewKey = false;
+	this->maxWidth=game->windowWidth;
+	this->maxHeight=game->windowHeight;
+	if(game->gamestate != -1){
+		this->width = this->maxWidth;
+		this->height = this->maxHeight;
+	}else{
+		this->width=0;
+		this->height=0;
+	}
+	this->borderDim=16;
+	this->speed=14;
+	this->color1 = sf::Color(82,181,139,255);
+	this->color2 = sf::Color(200,200,200,255);
+	this->previousGameState = game->gamestate;
+	this->previousMenu = game->currentMenu;
+	this->testo = sf::Text("", game->font, 32);
+	game->ChangeGameState(3, this);
+	this->state = 0;
+}
 void SettingsMenu::Render(sf::RenderWindow* window){
 	sf::RectangleShape rect;
 	rect.setSize(sf::Vector2f(this->width, this->height));
@@ -401,18 +446,18 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 	}
 }
 void SettingsMenu::Physics(GameEngine* game){
-		if(!this->isOpen){ //menu is opening
-			this->Animation();
-			if(this->width > this->maxWidth){this->width=this->maxWidth;}
-			if(this->height > this->maxHeight){this->height=this->maxHeight;}
-			if(this->width == this->maxWidth && this->height == this->maxHeight){this->isOpen=true;}
-		}else{
-			if(!this->isClosing){ //menu is open
-				int currentState = this->state;
-				bool tastiPremuti = false;
-				switch(this->state){
-				 case 0: //main settings menu
-				 	this->maxIndex=4;
+	if(!this->isOpen){ //menu is opening
+		this->Animation();
+		if(this->width > this->maxWidth){this->width=this->maxWidth;}
+		if(this->height > this->maxHeight){this->height=this->maxHeight;}
+		if(this->width == this->maxWidth && this->height == this->maxHeight){this->isOpen=true;}
+	}else{
+		if(!this->isClosing){ //menu is open
+			int currentState = this->state;
+			bool tastiPremuti = false;
+			switch(this->state){
+				case 0: //main settings menu
+					this->maxIndex=4;
 					if(game->keys[4] && !this->tastoGiaSchiacciato){this->isClosing=true;}
 					if((game->keys[5] || game->keys[7]) && !this->tastoGiaSchiacciato){
 						switch (this->index){
@@ -434,9 +479,8 @@ void SettingsMenu::Physics(GameEngine* game){
 						}
 					}
 					break;
-
-				 case 1: //keyboard settings menu
-				 	this->maxIndex=23;
+				case 1: //keyboard settings menu
+					this->maxIndex=23;
 					if(!this->listenNewKey && game->listenNewKey != 1){
 						if(game->keys[4] && !this->tastoGiaSchiacciato){this->index=this->state-1; this->state=0;}
 						if((game->keys[0] && this->index == (this->maxIndex-1)/2) && !this->tastoGiaSchiacciato){this->index = this->maxIndex;}
@@ -469,10 +513,9 @@ void SettingsMenu::Physics(GameEngine* game){
 							tastiPremuti=true; //don't read input in this menu until a new key is bound
 						}
 					}
-				 	break;
-
-				 case 2: //gamepad settings menu
-				 	this->maxIndex=23;
+					break;
+				case 2: //gamepad settings menu
+					this->maxIndex=23;
 					if(!this->listenNewKey && game->listenNewKey != 2){
 						if(game->keys[4] && !this->tastoGiaSchiacciato){this->index=this->state-1; this->state=0;}
 						if((game->keys[0] && this->index == (this->maxIndex-1)/2) && !this->tastoGiaSchiacciato){this->index = this->maxIndex;}
@@ -511,59 +554,31 @@ void SettingsMenu::Physics(GameEngine* game){
 							tastiPremuti=true; //don't read input in this menu until a new key is bound
 						}
 					}
-				 	break;
-
-				 default: break;
-				}//fine switch(state)
-				if(game->keys[0] && !this->tastoGiaSchiacciato){
-					this->index--;
-				}
-				if(game->keys[1] && !this->tastoGiaSchiacciato){
-					this->index++;
-				}
-				if(this->index > this->maxIndex-1){this->index = 0;}
-				if(this->index < 0){this->index = this->maxIndex-1;}
-				for(int i=0; i<11; i++){ if(game->keys[i]){tastiPremuti=true;} }
-				this->tastoGiaSchiacciato=tastiPremuti;
-				if(currentState != this->state){this->Physics(game);} //update maxIndex to avoid rendering issues
-			}else{ //menu is closing
-				if(this->previousGameState == -1){
-					this->Animation();
-					if(this->width < 1 && this->height < 1){
-						game->ChangeGameState(this->previousGameState, this->previousMenu);
-						delete this;
-					}
-				}else{
+				break;
+				default: break;
+			}//fine switch(state)
+			if(game->keys[0] && !this->tastoGiaSchiacciato){
+				this->index--;
+			}
+			if(game->keys[1] && !this->tastoGiaSchiacciato){
+				this->index++;
+			}
+			if(this->index > this->maxIndex-1){this->index = 0;}
+			if(this->index < 0){this->index = this->maxIndex-1;}
+			for(int i=0; i<11; i++){ if(game->keys[i]){tastiPremuti=true;} }
+			this->tastoGiaSchiacciato=tastiPremuti;
+			if(currentState != this->state){this->Physics(game);} //update maxIndex to avoid rendering issues
+		}else{ //menu is closing
+			if(this->previousGameState == -1){
+				this->Animation();
+				if(this->width < 1 && this->height < 1){
 					game->ChangeGameState(this->previousGameState, this->previousMenu);
 					delete this;
 				}
+			}else{
+				game->ChangeGameState(this->previousGameState, this->previousMenu);
+				delete this;
 			}
 		}
+	}
 }
-SettingsMenu::SettingsMenu(GameEngine* game){
-	this->game = game;
-	this->index = 0; this->maxIndex = 0;
-	this->langMaxIndex = game->textEngine->languagesFoundCount-1;
-	for(this->langIndex=0; this->langIndex<this->langMaxIndex+1; this->langIndex++){
-		if(this->game->textEngine->languagesFound[this->langIndex] == this->game->language){break;}
-	}
-	this->listenNewKey = false;
-	this->maxWidth=game->windowWidth;
-	this->maxHeight=game->windowHeight;
-	if(game->gamestate != -1){
-		this->width = this->maxWidth;
-		this->height = this->maxHeight;
-	}else{
-		this->width=0;
-		this->height=0;
-	}
-	this->borderDim=16;
-	this->speed=14;
-	this->color1 = sf::Color(82,181,139,255);
-	this->color2 = sf::Color(200,200,200,255);
-	this->previousGameState = game->gamestate;
-	this->previousMenu = game->currentMenu;
-	this->testo = sf::Text("", game->font, 32);
-	game->ChangeGameState(3, this);
-	this->state = 0;
-} 

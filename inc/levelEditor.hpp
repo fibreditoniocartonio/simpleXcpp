@@ -16,7 +16,7 @@ class Editor : public Menu{  //gamestate 1000
     GameEngine* game;
     void* previousMenu;
     int index, maxIndex, previousGameState, windowWidthEditor, windowHeightEditor;
-    bool showCameraDot, tastoGiaSchiacciato;
+    bool showCameraDot, tastoGiaSchiacciato, alertAspectRatioAlreadyShown;
     int state;
     /*  state 0: in level editor
         state 1: level editor main menu

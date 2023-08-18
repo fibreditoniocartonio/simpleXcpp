@@ -17,6 +17,7 @@
 
 int main(){
 	GameEngine game;
+	game.SetLanguage("english.txt"); //read texts from language file
 	sf::RenderWindow window(sf::VideoMode(game.windowWidth, game.windowHeight), "simpleXcpp");
 	game.window = &window;
 	window.setFramerateLimit(game.frameLimit);
@@ -30,7 +31,6 @@ int main(){
 	game.level = &level;
 
     new MainMenu(&game);
-    game.SetLanguage("english.txt"); //read texts from language file
 
 	//game loop
 	while (window.isOpen()){
