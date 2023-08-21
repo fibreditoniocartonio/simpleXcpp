@@ -55,13 +55,19 @@ class MainMenu : public Menu{   //gamestate 2
 
 class SettingsMenu : public Menu{   //gamestate 3
  public:
-	int previousGameState, borderDim, index, maxIndex, langIndex, langMaxIndex;
+	int previousGameState, borderDim, index, langIndex, langMaxIndex;
 	bool tastoGiaSchiacciato=true, listenNewKey;
 	sf::Text testo;
 	sf::Color color1, color2;
+	std::vector<Testo*> textClick;
+	std::string language;
 	void* previousMenu;
 	GameEngine* game;
 	int state; //0: main setting menu, 1:keyboard settings, 2:gamepad settings
+	int maxIndex [3]; //maxIndex [state]
+	void InitializeClickableText();
+	void CleanClickableText();
+	void CloseMenu();	
 	void Render(sf::RenderWindow* window) override;
 	void Physics(GameEngine* game) override;
 	SettingsMenu(GameEngine* game);

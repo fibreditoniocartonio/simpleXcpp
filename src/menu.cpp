@@ -165,7 +165,7 @@ void MainMenu::InitializeClickableText(){
 }
 void MainMenu::CloseMenu(){
 	this->CleanClickableText();
-	this->game->ChangeGameState(this->previousGameState, this);
+	this->game->ChangeGameState(this->previousGameState, this->previousMenu);
 	delete this;
 }
 void MainMenu::Render(sf::RenderWindow* window){
@@ -252,9 +252,13 @@ void MainMenu::Physics(GameEngine* game){
 //SettingsMenu -> gamestate = 3
 SettingsMenu::SettingsMenu(GameEngine* game){
 	this->game = game;
-	this->index = 0; this->maxIndex = 0;
+	this->index = 0; 
+	this->state = 0;
+	this->maxIndex [0] = 4;
+	this->maxIndex [1] = 23;
+	this->maxIndex [2] = 23;
 	this->langMaxIndex = game->textEngine->languagesFoundCount-1;
-	for(this->langIndex=0; this->langIndex<this->langMaxIndex+1; this->langIndex++){
+	for(this->langIndex=0; this->langIndex < this->langMaxIndex+1; this->langIndex++){
 		if(this->game->textEngine->languagesFound[this->langIndex] == this->game->language){break;}
 	}
 	this->listenNewKey = false;
@@ -274,8 +278,37 @@ SettingsMenu::SettingsMenu(GameEngine* game){
 	this->previousGameState = game->gamestate;
 	this->previousMenu = game->currentMenu;
 	this->testo = sf::Text("", game->font, 32);
-	game->ChangeGameState(3, this);
-	this->state = 0;
+	this->language=game->language;
+	this->InitializeClickableText();	
+	game->ChangeGameState(3, this);	
+}
+void SettingsMenu::CleanClickableText(){for(int i=0; i < this->textClick.size(); i++){ delete (this->textClick[i]); this->textClick = std::vector<Testo*>();}}
+void SettingsMenu::InitializeClickableText(){
+	this->CleanClickableText();
+	//state 0:
+	int textSize = 16;
+	int x=(int)(this->game->window->getView().getCenter().x - this->maxWidth/2);
+	int y=(int)(this->game->window->getView().getCenter().y - this->maxHeight/2);
+	int i=0;
+	for(; i < this->maxIndex[0]; i++){
+		this->textClick.push_back(new Testo("O", x+this->borderDim/2, y+this->testo.getLineSpacing()*(2+i)+textSize*2+textSize*i, textSize, sf::Color(63,72,255,255), this->game->font));
+		this->textClick[this->textClick.size()-1]->width = this->width-this->borderDim;
+		switch(i){
+		case 0: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[6]);
+			break;
+		case 1: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[7]);
+			break;
+		case 2: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[24]+": "+this->game->textEngine->testo[0]);
+			break;
+		default: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[8]);
+			break;
+		}
+	}
+}
+void SettingsMenu::CloseMenu(){
+	this->CleanClickableText();
+	this->game->ChangeGameState(this->previousGameState, this->previousMenu);
+	delete this;
 }
 void SettingsMenu::Render(sf::RenderWindow* window){
 	sf::RectangleShape rect;
@@ -300,32 +333,19 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 			AlignCenter(&this->testo);
 			this->testo.setPosition(sf::Vector2f(x+this->width/2, y+this->borderDim/2));
 			window->draw(this->testo);
-			this->testo.setCharacterSize(16);
 			AlignLeft(&this->testo);
-			for(int i=0; i<this->maxIndex; i++){
-				this->testo.setPosition(sf::Vector2f(x+borderDim/2, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
-				std::string txtString = " ";
+			for(int i=0; i < this->maxIndex[this->state]; i++){
+				this->textClick[i]->CopyTextIn(&this->testo);
 				if(this->index == i){
 					this->testo.setFillColor(sf::Color(255,0,0,255));
-					txtString = ">";
+					this->testo.setString(">"+this->testo.getString());
 				}else{
 					this->testo.setFillColor(sf::Color::White);
 				}
-				switch(i){
-				 case 0: txtString+=this->game->textEngine->testo[6];
-				 	break;
-				 case 1: txtString+=this->game->textEngine->testo[7];
-				 	break;
-				 case 2: txtString+=this->game->textEngine->testo[24]+": "+this->game->textEngine->testo[0];
-				 	break;
-				 default: txtString+=this->game->textEngine->testo[8];
-				 	break;
-				}
-				this->testo.setString(txtString);
 				window->draw(this->testo);
+				/*rect.setPosition(sf::Vector2f(this->textClick[i]->x, this->textClick[i]->y)); rect.setSize(sf::Vector2f(this->textClick[i]->width, this->textClick[i]->height)); rect.setFillColor(sf::Color(0,0,255,150)); window->draw(rect); //text hitbox for mouse*/
 			}
 			break;
-
 		 case 1: //keyboard settings menu
 			this->testo.setCharacterSize(32);
 			this->testo.setString(this->game->textEngine->testo[9]);
@@ -335,11 +355,11 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 			window->draw(this->testo);
 			this->testo.setCharacterSize(16);
 			AlignLeft(&this->testo);
-			for(int i=0; i<(this->maxIndex-1)/2+1; i++){
-				if(i<(this->maxIndex-1)/2){
+			for(int i=0; i<(this->maxIndex[this->state]-1)/2+1; i++){
+				if(i<(this->maxIndex[this->state]-1)/2){
 				  for(int j=0; j<2; j++){
 					this->testo.setPosition(sf::Vector2f(x+(j*2+1)*this->width/5, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
-					if(this->index == i+j*(this->maxIndex-1)/2){
+					if(this->index == i+j*(this->maxIndex[this->state]-1)/2){
 						if(this->game->listenNewKey != 1){
 						this->testo.setString(">"+std::to_string(game->keySettings[i][j]));
 						//this->testo.setString(">"+sf::Keyboard().getDescription(sf::Keyboard().delocalize(game->keySettings[i][j]))); //require SFML 2.6 that i dont have
@@ -370,7 +390,7 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 				 case 9:  this->testo.setString(" "+this->game->textEngine->testo[20]+":"); break;
 				 case 10: this->testo.setString(" "+this->game->textEngine->testo[21]+":"); break;
 				 default:
-				 	if(this->index == this->maxIndex-1){
+				 	if(this->index == this->maxIndex[this->state]-1){
 						this->testo.setString(">"+this->game->textEngine->testo[8]);
 						this->testo.setFillColor(sf::Color(255,0,0,255));
 					}else{
@@ -391,8 +411,8 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 			window->draw(this->testo);
 			this->testo.setCharacterSize(16);
 			AlignLeft(&this->testo);
-			for(int i=0; i<(this->maxIndex-1)/2+1; i++){
-				if(i<(this->maxIndex-1)/2){
+			for(int i=0; i<(this->maxIndex[this->state]-1)/2+1; i++){
+				if(i<(this->maxIndex[this->state]-1)/2){
 				  for(int j=0; j<2; j++){
 					this->testo.setPosition(sf::Vector2f(x+(j+1)*this->width/3, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
 					std::string keyBinded;
@@ -401,7 +421,7 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 					}else{
 						keyBinded = std::to_string(game->joystickHandler.keySettings[i][j]);
 					}
-					if(this->index == i+j*(this->maxIndex-1)/2){
+					if(this->index == i+j*(this->maxIndex[this->state]-1)/2){
 						if(this->game->listenNewKey != 2){
 							this->testo.setString(">"+keyBinded);
 						}else{
@@ -430,7 +450,7 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 				 case 9:  this->testo.setString(" "+this->game->textEngine->testo[20]+":"); break;
 				 case 10: this->testo.setString(" "+this->game->textEngine->testo[21]+":"); break;
 				 default:
-				 	if(this->index == this->maxIndex-1){
+				 	if(this->index == this->maxIndex[this->state]-1){
 						this->testo.setString(">"+this->game->textEngine->testo[8]);
 						this->testo.setFillColor(sf::Color(255,0,0,255));
 					}else{
@@ -446,6 +466,7 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 	}
 }
 void SettingsMenu::Physics(GameEngine* game){
+	if(this->language != this->game->language){ this->language=this->game->language; this->InitializeClickableText();}
 	if(!this->isOpen){ //menu is opening
 		this->Animation();
 		if(this->width > this->maxWidth){this->width=this->maxWidth;}
@@ -454,12 +475,22 @@ void SettingsMenu::Physics(GameEngine* game){
 	}else{
 		if(!this->isClosing){ //menu is open
 			int currentState = this->state;
-			bool tastiPremuti = false;
+			Entity mouse (this->game->mouse.x, this->game->mouse.y, 1, 1);
+			bool tastiPremuti=false, click=false;
 			switch(this->state){
 				case 0: //main settings menu
-					this->maxIndex=4;
+					//mouse input
+					for(int i=0; i < this->maxIndex[this->state]; i++){
+						if(CollisionBetween(this->textClick[i], &mouse)){
+							this->index = i;
+							if(this->game->mouseClick[0]){
+								click=true; tastiPremuti=true;
+							}
+						}
+					}
+					//keyboard/gamepad input				
 					if(game->keys[4] && !this->tastoGiaSchiacciato){this->isClosing=true;}
-					if((game->keys[5] || game->keys[7]) && !this->tastoGiaSchiacciato){
+					if((game->keys[5] || game->keys[7] || click) && !this->tastoGiaSchiacciato){
 						switch (this->index){
 							case 0: case 1:
 								this->state=this->index+1;
@@ -480,21 +511,20 @@ void SettingsMenu::Physics(GameEngine* game){
 					}
 					break;
 				case 1: //keyboard settings menu
-					this->maxIndex=23;
 					if(!this->listenNewKey && game->listenNewKey != 1){
 						if(game->keys[4] && !this->tastoGiaSchiacciato){this->index=this->state-1; this->state=0;}
-						if((game->keys[0] && this->index == (this->maxIndex-1)/2) && !this->tastoGiaSchiacciato){this->index = this->maxIndex;}
-						if((game->keys[0] && this->index == this->maxIndex-1) && !this->tastoGiaSchiacciato){this->index = (this->maxIndex-1)/2;}
-						if((game->keys[1] && this->index == (this->maxIndex-1)/2-1) && !this->tastoGiaSchiacciato){this->index = this->maxIndex-2;}
+						if((game->keys[0] && this->index == (this->maxIndex[this->state]-1)/2) && !this->tastoGiaSchiacciato){this->index = this->maxIndex[this->state];}
+						if((game->keys[0] && this->index == this->maxIndex[this->state]-1) && !this->tastoGiaSchiacciato){this->index = (this->maxIndex[this->state]-1)/2;}
+						if((game->keys[1] && this->index == (this->maxIndex[this->state]-1)/2-1) && !this->tastoGiaSchiacciato){this->index = this->maxIndex[this->state]-2;}
 						if((game->keys[2] || game->keys[3] )&& !this->tastoGiaSchiacciato){
-							if(this->index < (this->maxIndex-1)/2){ 
-								this->index += (this->maxIndex-1)/2;
+							if(this->index < (this->maxIndex[this->state]-1)/2){ 
+								this->index += (this->maxIndex[this->state]-1)/2;
 							}else{
-								this->index -= (this->maxIndex-1)/2;
+								this->index -= (this->maxIndex[this->state]-1)/2;
 							}
 						}
 						if((game->keys[5] || game->keys[7]) && !this->tastoGiaSchiacciato){
-							if(this->index == this->maxIndex-1){
+							if(this->index == this->maxIndex[this->state]-1){
 								this->index=this->state-1; this->state=0;
 							}else{
 								this->listenNewKey = true;
@@ -502,10 +532,10 @@ void SettingsMenu::Physics(GameEngine* game){
 						}
 					}else{
 						if(game->listenNewKey != 1){
-							if(this->index < (this->maxIndex-1)/2){
+							if(this->index < (this->maxIndex[this->state]-1)/2){
 								game->newKeyIndex[0]=this->index; game->newKeyIndex[1]=0;
 							}else{
-								game->newKeyIndex[0]=this->index-(this->maxIndex-1)/2; game->newKeyIndex[1]=1;
+								game->newKeyIndex[0]=this->index-(this->maxIndex[this->state]-1)/2; game->newKeyIndex[1]=1;
 							}
 							game->listenNewKey=1;
 							this->listenNewKey=false;
@@ -515,21 +545,20 @@ void SettingsMenu::Physics(GameEngine* game){
 					}
 					break;
 				case 2: //gamepad settings menu
-					this->maxIndex=23;
 					if(!this->listenNewKey && game->listenNewKey != 2){
 						if(game->keys[4] && !this->tastoGiaSchiacciato){this->index=this->state-1; this->state=0;}
-						if((game->keys[0] && this->index == (this->maxIndex-1)/2) && !this->tastoGiaSchiacciato){this->index = this->maxIndex;}
-						if((game->keys[0] && this->index == this->maxIndex-1) && !this->tastoGiaSchiacciato){this->index = (this->maxIndex-1)/2;}
-						if((game->keys[1] && this->index == (this->maxIndex-1)/2-1) && !this->tastoGiaSchiacciato){this->index = this->maxIndex-2;}
+						if((game->keys[0] && this->index == (this->maxIndex[this->state]-1)/2) && !this->tastoGiaSchiacciato){this->index = this->maxIndex[this->state];}
+						if((game->keys[0] && this->index == this->maxIndex[this->state]-1) && !this->tastoGiaSchiacciato){this->index = (this->maxIndex[this->state]-1)/2;}
+						if((game->keys[1] && this->index == (this->maxIndex[this->state]-1)/2-1) && !this->tastoGiaSchiacciato){this->index = this->maxIndex[this->state]-2;}
 						if((game->keys[2] || game->keys[3] )&& !this->tastoGiaSchiacciato){
-							if(this->index < (this->maxIndex-1)/2){ 
-								this->index += (this->maxIndex-1)/2;
+							if(this->index < (this->maxIndex[this->state]-1)/2){ 
+								this->index += (this->maxIndex[this->state]-1)/2;
 							}else{
-								this->index -= (this->maxIndex-1)/2;
+								this->index -= (this->maxIndex[this->state]-1)/2;
 							}
 						}
 						if((game->keys[5] || game->keys[7]) && !this->tastoGiaSchiacciato){
-							if(this->index == this->maxIndex-1){
+							if(this->index == this->maxIndex[this->state]-1){
 								this->index=this->state-1; this->state=0;
 							}else{
 								bool atLeastOneJoystickIsConnected = false;
@@ -543,10 +572,10 @@ void SettingsMenu::Physics(GameEngine* game){
 						}
 					}else{
 						if(game->listenNewKey != 2){
-							if(this->index < (this->maxIndex-1)/2){
+							if(this->index < (this->maxIndex[this->state]-1)/2){
 								game->newKeyIndex[0]=this->index; game->newKeyIndex[1]=0;
 							}else{
-								game->newKeyIndex[0]=this->index-(this->maxIndex-1)/2; game->newKeyIndex[1]=1;
+								game->newKeyIndex[0]=this->index-(this->maxIndex[this->state]-1)/2; game->newKeyIndex[1]=1;
 							}
 							game->listenNewKey=2;
 							this->listenNewKey=false;
@@ -563,8 +592,8 @@ void SettingsMenu::Physics(GameEngine* game){
 			if(game->keys[1] && !this->tastoGiaSchiacciato){
 				this->index++;
 			}
-			if(this->index > this->maxIndex-1){this->index = 0;}
-			if(this->index < 0){this->index = this->maxIndex-1;}
+			if(this->index > this->maxIndex[this->state]-1){this->index = 0;}
+			if(this->index < 0){this->index = this->maxIndex[this->state]-1;}
 			for(int i=0; i<11; i++){ if(game->keys[i]){tastiPremuti=true;} }
 			this->tastoGiaSchiacciato=tastiPremuti;
 			if(currentState != this->state){this->Physics(game);} //update maxIndex to avoid rendering issues
@@ -572,12 +601,10 @@ void SettingsMenu::Physics(GameEngine* game){
 			if(this->previousGameState == -1){
 				this->Animation();
 				if(this->width < 1 && this->height < 1){
-					game->ChangeGameState(this->previousGameState, this->previousMenu);
-					delete this;
+					this->CloseMenu();
 				}
 			}else{
-				game->ChangeGameState(this->previousGameState, this->previousMenu);
-				delete this;
+				this->CloseMenu();
 			}
 		}
 	}

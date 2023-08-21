@@ -91,8 +91,8 @@ void Player::Physics(GameEngine* game, Livello* level){
 	}
 
 	if(game->keys[7]){
-        //new SettingsMenu(game);
-		new Editor(game);
+        new SettingsMenu(game);
+		//new Editor(game);
 		//new Alert(game, 16, level->GenerateLevelString());
 	}
 } 
