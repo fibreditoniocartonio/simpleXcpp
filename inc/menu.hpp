@@ -55,7 +55,7 @@ class MainMenu : public Menu{   //gamestate 2
 
 class SettingsMenu : public Menu{   //gamestate 3
  public:
-	int previousGameState, borderDim, index, langIndex, langMaxIndex;
+	int x, y, previousGameState, borderDim, index, langIndex, langMaxIndex;
 	bool tastoGiaSchiacciato=true, listenNewKey;
 	sf::Text testo;
 	sf::Color color1, color2;

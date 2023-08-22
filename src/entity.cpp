@@ -2,12 +2,20 @@
 #include "../inc/level.hpp"
 #include "../inc/entity.hpp"
 
+Entity::Entity (){} Entity::~Entity() {}
+Entity::Entity (float x, float y, int width, int height){ this->x=x; this->y=y; this->width=width; this->height=height;}
 void Entity::Physics(Player* player) {}
 void Entity::Render(sf::RenderWindow* window){}
 std::string Entity::SaveToFile(){return "";}
-Entity::~Entity() {}
-Entity::Entity (){}
-Entity::Entity (float x, float y, int width, int height){ this->x=x; this->y=y; this->width=width; this->height=height;}
+void Entity::DrawHitbox(sf::RenderWindow* window){
+        sf::RectangleShape rect;
+		rect.setPosition(sf::Vector2f(this->x, this->y));
+		rect.setSize(sf::Vector2f(this->width, this->height));
+		rect.setFillColor(sf::Color(255,0,187,120));
+        rect.setOutlineColor (sf::Color(255,0,187,255));
+        rect.setOutlineThickness(1.0);
+		window->draw(rect);
+}
 
 AABB::AABB(Entity* e1){
     if(e1->xv > 0){
@@ -83,7 +91,7 @@ std::string Blocco::SaveToFile(){
         +">";
     }else{ return ""; }
 }
-void Blocco::Render(sf::RenderWindow* window){ window->draw(shape); }
+void Blocco::Render(sf::RenderWindow* window){ window->draw(shape);}
 
 //Slope
 int Slope::Initialize(std::vector<Entity*> *entity, std::string* tempString){
@@ -154,5 +162,5 @@ std::string Slope::SaveToFile(){
     +std::to_string(this->color.r)+";"+std::to_string(this->color.g)+";"+std::to_string(this->color.b)+";"+std::to_string(this->color.a)+";"
     +">";
 }
-void Slope::Render(sf::RenderWindow* window){ window->draw(shape); }
+void Slope::Render(sf::RenderWindow* window){ window->draw(shape);}
 

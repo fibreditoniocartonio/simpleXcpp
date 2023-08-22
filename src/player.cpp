@@ -8,6 +8,7 @@
 #include "../inc/levelEditor.hpp"
 
 Player::Player(GameEngine* game){
+		this->game = game;
 		this->width=20; this->height=24;
 		this->shape.setSize(sf::Vector2f(this->width, this->height));
 		this->shape.setFillColor(sf::Color(0,64,240,255));
@@ -100,6 +101,7 @@ void Player::Physics(GameEngine* game, Livello* level){
 void Player::Render(sf::RenderWindow* window){
 	this->shape.setPosition((int)this->x, (int)this->y);
     window->draw(this->shape);
+	if(this->game->debugMode){this->DrawHitbox(window);}
 	//this->text.setString(("X: "+std::to_string((int)this->x)+"\tY: "+std::to_string((int)this->y)+"\nXV: "+std::to_string(this->xv)+"\tYV: "+std::to_string(this->yv)));
     //this->text.setPosition((int)this->x, (int)this->y-16);
 	//window->draw(this->text);

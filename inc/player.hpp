@@ -13,6 +13,7 @@ class GameEngine;
 
 class Player : public Entity{
  public:
+	GameEngine* game;
     const float speedDefault = 0.5;
     float speed = speedDefault;
 	float jumpHeight=8;

@@ -251,7 +251,7 @@ void MainMenu::Physics(GameEngine* game){
 
 //SettingsMenu -> gamestate = 3
 SettingsMenu::SettingsMenu(GameEngine* game){
-	this->game = game;
+	this->game = game;	
 	this->index = 0; 
 	this->state = 0;
 	this->maxIndex [0] = 4;
@@ -278,32 +278,40 @@ SettingsMenu::SettingsMenu(GameEngine* game){
 	this->previousGameState = game->gamestate;
 	this->previousMenu = game->currentMenu;
 	this->testo = sf::Text("", game->font, 32);
-	this->language=game->language;
+	this->x =(int)(game->window->getView().getCenter().x - this->maxWidth/2);
+	this->y =(int)(game->window->getView().getCenter().y - this->maxHeight/2);	
+	this->language=game->language;	
 	this->InitializeClickableText();	
 	game->ChangeGameState(3, this);	
 }
 void SettingsMenu::CleanClickableText(){for(int i=0; i < this->textClick.size(); i++){ delete (this->textClick[i]); this->textClick = std::vector<Testo*>();}}
 void SettingsMenu::InitializeClickableText(){
 	this->CleanClickableText();
+	int textSize;
 	//state 0:
-	int textSize = 16;
-	int x=(int)(this->game->window->getView().getCenter().x - this->maxWidth/2);
-	int y=(int)(this->game->window->getView().getCenter().y - this->maxHeight/2);
-	int i=0;
-	for(; i < this->maxIndex[0]; i++){
-		this->textClick.push_back(new Testo("O", x+this->borderDim/2, y+this->testo.getLineSpacing()*(2+i)+textSize*2+textSize*i, textSize, sf::Color(63,72,255,255), this->game->font));
-		this->textClick[this->textClick.size()-1]->width = this->width-this->borderDim;
+	textSize = 16;
+	for(int i=0; i < this->maxIndex[0]; i++){
+		this->textClick.push_back(new Testo("O", this->x+this->borderDim/2, this->y+this->testo.getLineSpacing()*(2+i)+textSize*2+textSize*i, textSize, sf::Color(63,72,255,255), this->game->font));
+		this->textClick[this->textClick.size()-1]->width = (this->maxWidth - this->borderDim);
 		switch(i){
-		case 0: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[6]);
-			break;
-		case 1: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[7]);
-			break;
-		case 2: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[24]+": "+this->game->textEngine->testo[0]);
-			break;
-		default: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[8]);
-			break;
+			case 0: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[6]); break;
+			case 1: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[7]); break;
+			case 2: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[24]+": "+this->game->textEngine->testo[0]); break;
+			default: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[8]); break;
 		}
 	}
+	//state 1:
+	textSize = 16;
+	for(int i=0; i < this->maxIndex[1]; i++){
+		this->textClick.push_back(new Testo("O", this->x+this->borderDim/2, this->y+this->testo.getLineSpacing()*(2+i)+textSize*2+textSize*i, textSize, sf::Color(63,72,255,255), this->game->font));
+		this->textClick[this->textClick.size()-1]->width = (this->maxWidth - this->borderDim);
+		switch(i){
+			case 0: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[6]); break;
+			case 1: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[7]); break;
+			case 2: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[24]+": "+this->game->textEngine->testo[0]); break;
+			default: this->textClick[this->textClick.size()-1]->testo.setString(this->game->textEngine->testo[8]); break;
+		}
+	}	
 }
 void SettingsMenu::CloseMenu(){
 	this->CleanClickableText();
@@ -313,13 +321,11 @@ void SettingsMenu::CloseMenu(){
 void SettingsMenu::Render(sf::RenderWindow* window){
 	sf::RectangleShape rect;
 	rect.setSize(sf::Vector2f(this->width, this->height));
-	int x=(int)(window->getView().getCenter().x - this->width/2);
-	int y=(int)(window->getView().getCenter().y - this->height/2);
-	rect.setPosition(x,y);
+	rect.setPosition(this->x+(this->maxWidth/2 - this->width/2), this->y+(this->maxHeight/2 - this->height/2));
 	rect.setFillColor(this->color2);
 	window->draw(rect);
 	if((this->width > this->borderDim) && (this->height > this->borderDim)){
-		rect.setPosition(x+(this->borderDim/2),y+(this->borderDim/2));
+		rect.setPosition(this->x+(this->borderDim/2)+(this->maxWidth/2 - this->width/2), this->y+(this->borderDim/2)+(this->maxHeight/2 - this->height/2));
 		rect.setSize(sf::Vector2f((this->width - this->borderDim), (this->height - this->borderDim)));
 		rect.setFillColor(this->color1);
 		window->draw(rect);
@@ -331,7 +337,7 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 			this->testo.setString(this->game->textEngine->testo[5]);
 			this->testo.setFillColor(sf::Color(255,0,0,255));
 			AlignCenter(&this->testo);
-			this->testo.setPosition(sf::Vector2f(x+this->width/2, y+this->borderDim/2));
+			this->testo.setPosition(sf::Vector2f(this->x+this->width/2, this->y+this->borderDim/2));
 			window->draw(this->testo);
 			AlignLeft(&this->testo);
 			for(int i=0; i < this->maxIndex[this->state]; i++){
@@ -351,14 +357,14 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 			this->testo.setString(this->game->textEngine->testo[9]);
 			this->testo.setFillColor(sf::Color(255,0,0,255));
 			AlignCenter(&this->testo);
-			this->testo.setPosition(sf::Vector2f(x+this->width/2, y+this->borderDim/2));
+			this->testo.setPosition(sf::Vector2f(this->x+this->width/2, this->y+this->borderDim/2));
 			window->draw(this->testo);
 			this->testo.setCharacterSize(16);
 			AlignLeft(&this->testo);
 			for(int i=0; i<(this->maxIndex[this->state]-1)/2+1; i++){
 				if(i<(this->maxIndex[this->state]-1)/2){
 				  for(int j=0; j<2; j++){
-					this->testo.setPosition(sf::Vector2f(x+(j*2+1)*this->width/5, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
+					this->testo.setPosition(sf::Vector2f(this->x+(j*2+1)*this->width/5, this->y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
 					if(this->index == i+j*(this->maxIndex[this->state]-1)/2){
 						if(this->game->listenNewKey != 1){
 						this->testo.setString(">"+std::to_string(game->keySettings[i][j]));
@@ -376,7 +382,7 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 				  }
 				}
 				this->testo.setFillColor(sf::Color::White);
-				this->testo.setPosition(sf::Vector2f(x+borderDim/2, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
+				this->testo.setPosition(sf::Vector2f(this->x+borderDim/2, this->y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
 				switch(i){
 				 case 0:  this->testo.setString(" "+this->game->textEngine->testo[11]+":"); break;
 				 case 1:  this->testo.setString(" "+this->game->textEngine->testo[12]+":"); break;
@@ -407,14 +413,14 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 			this->testo.setString(this->game->textEngine->testo[10]);
 			this->testo.setFillColor(sf::Color(255,0,0,255));
 			AlignCenter(&this->testo);
-			this->testo.setPosition(sf::Vector2f(x+this->width/2, y+this->borderDim/2));
+			this->testo.setPosition(sf::Vector2f(this->x+this->width/2, this->y+this->borderDim/2));
 			window->draw(this->testo);
 			this->testo.setCharacterSize(16);
 			AlignLeft(&this->testo);
 			for(int i=0; i<(this->maxIndex[this->state]-1)/2+1; i++){
 				if(i<(this->maxIndex[this->state]-1)/2){
 				  for(int j=0; j<2; j++){
-					this->testo.setPosition(sf::Vector2f(x+(j+1)*this->width/3, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
+					this->testo.setPosition(sf::Vector2f(this->x+(j+1)*this->width/3, this->y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
 					std::string keyBinded;
 					if(game->joystickHandler.keySettings[i][j] == -1){
 						keyBinded = "-"; //not bound
@@ -436,7 +442,7 @@ void SettingsMenu::Render(sf::RenderWindow* window){
 				  }
 				}
 				this->testo.setFillColor(sf::Color::White);
-				this->testo.setPosition(sf::Vector2f(x+borderDim/2, y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
+				this->testo.setPosition(sf::Vector2f(this->x+borderDim/2, this->y+(this->testo.getLineSpacing()*(2+i)+this->testo.getCharacterSize()*2+this->testo.getCharacterSize()*i)));
 				switch(i){
 				 case 0:  this->testo.setString(" "+this->game->textEngine->testo[11]+":"); break;
 				 case 1:  this->testo.setString(" "+this->game->textEngine->testo[12]+":"); break;
@@ -475,7 +481,7 @@ void SettingsMenu::Physics(GameEngine* game){
 	}else{
 		if(!this->isClosing){ //menu is open
 			int currentState = this->state;
-			Entity mouse (this->game->mouse.x, this->game->mouse.y, 1, 1);
+			Entity mouse (this->game->mouse.x+this->x, this->game->mouse.y+this->y, 1, 1);
 			bool tastiPremuti=false, click=false;
 			switch(this->state){
 				case 0: //main settings menu

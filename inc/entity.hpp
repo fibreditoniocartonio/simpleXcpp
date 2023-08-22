@@ -16,6 +16,7 @@ class Entity {
 	int width, height;
 	float xv=0, yv=0; //momentum
 	std::string id;
+	void DrawHitbox(sf::RenderWindow* window);
 	virtual void Physics(Player* player);
 	virtual void Render(sf::RenderWindow* window);
 	virtual std::string SaveToFile();
