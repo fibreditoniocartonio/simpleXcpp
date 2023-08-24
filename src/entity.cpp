@@ -9,7 +9,7 @@ void Entity::Render(sf::RenderWindow* window){}
 std::string Entity::SaveToFile(){return "";}
 void Entity::DrawHitbox(sf::RenderWindow* window){
         sf::RectangleShape rect;
-		rect.setPosition(sf::Vector2f(this->x, this->y));
+		rect.setPosition(sf::Vector2f((int)this->x, (int)this->y));
 		rect.setSize(sf::Vector2f(this->width, this->height));
 		rect.setFillColor(sf::Color(255,0,187,120));
         rect.setOutlineColor (sf::Color(255,0,187,255));

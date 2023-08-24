@@ -72,3 +72,22 @@ class SettingsMenu : public Menu{   //gamestate 3
 	void Physics(GameEngine* game) override;
 	SettingsMenu(GameEngine* game);
 };
+
+class DebugMenu : public Menu{   //gamestate 3
+ public:
+	int x, y, previousGameState, borderDim, index, langIndex, langMaxIndex;
+	bool tastoGiaSchiacciato=true;
+	sf::Text testo;
+	sf::Color color1, color2;
+	std::vector<Testo*> textClick;
+	std::string language;
+	void* previousMenu;
+	GameEngine* game;
+	int maxIndex;
+	void InitializeClickableText();
+	void CleanClickableText();
+	void CloseMenu();	
+	void Render(sf::RenderWindow* window) override;
+	void Physics(GameEngine* game) override;
+	DebugMenu(GameEngine* game);
+};

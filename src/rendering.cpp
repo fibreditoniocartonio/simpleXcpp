@@ -57,6 +57,8 @@ void RenderGameScreen(GameEngine* game, Player* player, Livello* level, sf::Rend
 	 case 2: static_cast<MainMenu*>(game->currentMenu)->Render(window);
 		break;        
 	 case 3: static_cast<SettingsMenu*>(game->currentMenu)->Render(window);
+	 	break;
+	 case 7: static_cast<DebugMenu*>(game->currentMenu)->Render(window);
 		break;
 	 case 1000: static_cast<Editor*>(game->currentMenu)->Render(window);
 		break;		
@@ -75,5 +77,10 @@ void RenderGameScreen(GameEngine* game, Player* player, Livello* level, sf::Rend
 		player->Render(window);
 		break;
 	}//fine dello switch(gamestate)
+	if(game->debugMode){
+		sf::Text debugText ("DEBUGMODE", game->font, 12); debugText.setFillColor(sf::Color::White); debugText.setPosition(sf::Vector2f(window->getView().getCenter().x-game->windowWidth/2, window->getView().getCenter().y-game->windowHeight/2));
+		//debugText.setString(debugText.getString() + "\nLast 7 pressed keys:" + std::to_string(game->ultimoTastoLetto[0]) + "-" + std::to_string(game->ultimoTastoLetto[1]) +"-" + std::to_string(game->ultimoTastoLetto[2]) +"-" + std::to_string(game->ultimoTastoLetto[3]) +"-" + std::to_string(game->ultimoTastoLetto[4]) +"-" + std::to_string(game->ultimoTastoLetto[5]) +"-" + std::to_string(game->ultimoTastoLetto[6]));
+		window->draw(debugText);
+	}
 	window->display();
 }

@@ -32,3 +32,5 @@
 00031-disconnesso
 00032-Premi un tasto per continuare.
 00033-L'Editor di Livelli e' pensato per funzionare con un aspect ratio di 16:9. Un aspect ratio differente portera' a comportamenti inaspettati del rendering grafico.
+00034-Attiva/Disattiva modalita' Debug
+00035-Apri questo livello nell'Editor

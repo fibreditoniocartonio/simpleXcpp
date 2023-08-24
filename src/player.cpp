@@ -92,11 +92,15 @@ void Player::Physics(GameEngine* game, Livello* level){
 	}
 
 	if(game->keys[7]){
-        new SettingsMenu(game);
+		if(game->ultimoTastoLetto[0] == 0 && game->ultimoTastoLetto[1] == 1 && game->ultimoTastoLetto[2] == 3 && game->ultimoTastoLetto[3] == 2 && game->ultimoTastoLetto[4] == 4 && game->ultimoTastoLetto[5] == 6 && game->ultimoTastoLetto[6] == 7){
+			new DebugMenu(game);
+		}else{
+			new SettingsMenu(game);
+		}
 		//new Editor(game);
 		//new Alert(game, 16, level->GenerateLevelString());
 	}
-} 
+}
 
 void Player::Render(sf::RenderWindow* window){
 	this->shape.setPosition((int)this->x, (int)this->y);

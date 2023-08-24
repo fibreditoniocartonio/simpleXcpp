@@ -45,12 +45,13 @@ class GameEngine {
 	//stato 4: opzioni nelle stage selection - var nelleOpzioniStageSelect=false; 
 	//stato 5: nel menu carica partita - var nelMenuCaricaPartita=false; 
 	//stato 6: menu Mappa - map menu
+	//stato 7: Debug Menu
 	//stato 1000: Level Editor
 	
 	void ChangeGameState(int newGameState, void* newMenu);
 
 	//input key settings
-	int ultimoTastoLetto;
+	int ultimoTastoLetto[7];
 	bool keys[11]={
 		false, //0 = su
 		false, //1 = giu
@@ -78,8 +79,9 @@ class GameEngine {
 	 	{sf::Keyboard::C,	sf::Keyboard::R}
 	};
 	
-	void UpdateKeys(sf::Keyboard::Key keyInput, bool isPressed);    
+	void UpdateKeys(sf::Keyboard::Key keyInput, bool isPressed);
 	void UpdateKeysJoystick(int keyInput, bool isPressed);
+	void UpdateUltimoTastoLetto(int nuovoTasto);
 	void UpdateMouseCoordinate(sf::Vector2f absoluteMousePosition);
 	void UpdateMouseButton(sf::Mouse::Button mouseInput, bool isPressed);
 	void BindNewKeyKB(sf::Keyboard::Key keyInput);

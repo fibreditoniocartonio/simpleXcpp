@@ -32,8 +32,8 @@
 00031-disconnected
 00032-Press any button to resume the game.
 00033-The Level Editor is designed to work with an aspect ratio of 16:9. There will be unexpected rendering behaviours with a different aspect ratio.
-00034-
-00035-
+00034-Toggle Debug Mode
+00035-Open this level with the Editor
 00036-
 00037-
 00038-

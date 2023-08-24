@@ -94,6 +94,8 @@ void DoGamePhysics(GameEngine* game, Player* player, Livello* level, sf::RenderW
 		break;        
 	 case 3: static_cast<SettingsMenu*>(game->currentMenu)->Physics(game);
 		break;
+	 case 7: static_cast<DebugMenu*>(game->currentMenu)->Physics(game);
+		break;        
 	 case 1000: static_cast<Editor*>(game->currentMenu)->Physics(game);
 		break;	        
 	 default: //usually -1, in game

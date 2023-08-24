@@ -24,12 +24,21 @@ void GameEngine::UpdateKeys(sf::Keyboard::Key keyInput, bool isPressed){
 			if(keyInput==this->keySettings[keyIndex][0] || keyInput==this->keySettings[keyIndex][1]){
 				if(isPressed){
 					this->keys[keyIndex]=true;
-					this->ultimoTastoLetto=keyIndex;
+					this->UpdateUltimoTastoLetto(keyIndex);
 				}else{
 					this->keys[keyIndex]=false;
 				}
 			}
 		}
+}
+
+void GameEngine::UpdateUltimoTastoLetto(int nuovoTasto){
+	if(ultimoTastoLetto[6] != nuovoTasto){
+		for(int i=1; i < 7; i++){
+			ultimoTastoLetto[i-1] = ultimoTastoLetto[i];
+		}
+		ultimoTastoLetto[6] = nuovoTasto;
+	}
 }
 
 void GameEngine::UpdateMouseCoordinate(sf::Vector2f absoluteMousePosition){
@@ -63,7 +72,7 @@ void GameEngine::UpdateKeysJoystick(int keyInput, bool isPressed){
 		  if(keyInput==this->joystickHandler.keySettings[keyIndex][0] || keyInput==this->joystickHandler.keySettings[keyIndex][1]){
 			 if(isPressed){
 				this->keys[keyIndex]=true;
-				this->ultimoTastoLetto=keyIndex;
+				this->UpdateUltimoTastoLetto(keyIndex);
 			 }else{
 				this->keys[keyIndex]=false;
 			 }
